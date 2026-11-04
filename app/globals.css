@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --herobg: #eef1fb;
+  --dot: #10b981;
+  --yellow: #ffd60a;
+  --ink: #0b1b4a;
+}
+
+html { scroll-behavior: smooth; }
+body { background: #ffffff; color: #606d9a; -webkit-font-smoothing: antialiased; }
+
+/* ---------- Shared bits ---------- */
+.pill {
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: var(--yellow); color: var(--ink);
+  font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; font-size: .72rem; padding: .4rem .85rem; border-radius: 999px;
+}
+
+/* ---------- Hero: exact light look + enhancements ---------- */
+.hero-map-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 34%, #000 100%);
+          mask-image: linear-gradient(to right, transparent 0%, #000 34%, #000 100%);
+}
+.gdot-big {
+  display: inline-block; width: .42em; height: .42em; border-radius: 50%;
+  background: var(--dot); margin-left: .2em; vertical-align: baseline;
+  box-shadow: 0 0 0 .16em rgba(16, 185, 129, .18);
+  animation: dotpulse 1.8s ease-in-out infinite;
+}
+
+/* real vehicles driving along the roads (responsive size + smooth motion) */
+.car {
+  position: absolute; z-index: 5; line-height: 1;
+  font-size: clamp(1.15rem, 1.5vw, 1.7rem);
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .4));
+  will-change: left, top, transform;
+}
+.car.c1 { animation: drive1 10s linear infinite; }
+.car.c2 { animation: drive2 13s linear infinite; }
+
+/* pulsing location pins */
+.pin { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 3px rgba(255, 214, 10, .25); z-index: 4; }
+.pin::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--yellow); animation: ping 2s ease-out infinite; }
+.pin.green { background: var(--dot); box-shadow: 0 0 0 3px rgba(16, 185, 129, .25); }
+.pin.green::after { border-color: var(--dot); animation-delay: .9s; }
+
+/* entrance */
+.fade-up { animation: fadeUp .6s both; }
+
+/* car 1 (van): drives up the main road, lower-left → upper-right, facing its travel direction */
+@keyframes drive1 {
+  0%   { left: 26%; top: 90%; transform: rotate(-30deg) scaleX(-1); opacity: 0; }
+  7%   { opacity: 1; }
+  30%  { left: 42%; top: 66%; transform: rotate(-32deg) scaleX(-1); }
+  55%  { left: 56%; top: 52%; transform: rotate(-22deg) scaleX(-1); }
+  80%  { left: 74%; top: 40%; transform: rotate(-26deg) scaleX(-1); }
+  95%  { left: 90%; top: 26%; transform: rotate(-24deg) scaleX(-1); opacity: 1; }
+  100% { left: 94%; top: 23%; transform: rotate(-24deg) scaleX(-1); opacity: 0; }
+}
+/* car 2: drives down a side road, upper-mid → lower-right */
+@keyframes drive2 {
+  0%   { left: 58%; top: 18%; transform: rotate(34deg) scaleX(-1); opacity: 0; }
+  8%   { opacity: 1; }
+  45%  { left: 70%; top: 48%; transform: rotate(22deg) scaleX(-1); }
+  85%  { left: 84%; top: 80%; transform: rotate(30deg) scaleX(-1); opacity: 1; }
+  100% { left: 88%; top: 86%; transform: rotate(30deg) scaleX(-1); opacity: 0; }
+}
+@keyframes ping { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(2.6); opacity: 0; } }
+@keyframes pillpulse { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes dotpulse { 0%, 100% { box-shadow: 0 0 0 .16em rgba(16,185,129,.18); } 50% { box-shadow: 0 0 0 .26em rgba(16,185,129,.08); } }
+@keyframes softpulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); } 70% { box-shadow: 0 0 0 7px rgba(16,185,129,0); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes popIn { from { opacity: 0; transform: translateY(10px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes dash { to { stroke-dashoffset: -25; } }
+
+/* reviews marquee (3-ish cards sliding) */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.animate-marquee { animation: marquee 36s linear infinite; }
+.marquee-wrap:hover .animate-marquee { animation-play-state: paused; }
+
+/* ---------- Entrance loader ---------- */
+.vh-loader { position: fixed; inset: 0; z-index: 9999; background: var(--ink); display: grid; place-items: center;
+  transition: transform .85s cubic-bezier(.76, 0, .24, 1); }
+.vh-leaving { transform: translateY(-100%); }
+.vh-loader-inner { display: flex; flex-direction: column; align-items: center; gap: 1.05rem; padding: 0 24px; text-align: center;
+  animation: vhPop .6s cubic-bezier(.34, 1.56, .64, 1) both; }
+@keyframes vhPop { from { opacity: 0; transform: translateY(14px) scale(.96); } to { opacity: 1; transform: none; } }
+.vh-logo-anim { display: inline-flex; align-items: center; gap: .6rem; }
+.vh-box { width: 54px; height: 54px; border-radius: 12px; background: var(--yellow); color: var(--ink);
+  font-family: var(--font-body), system-ui; font-weight: 900; font-size: 1.5rem; display: grid; place-items: center;
+  animation: vhBoxIn .7s cubic-bezier(.34, 1.56, .64, 1) both; }
+@keyframes vhBoxIn { 0% { transform: scale(0) rotate(-20deg); } 100% { transform: scale(1) rotate(0); } }
+.vh-word { font-family: var(--font-body), system-ui; font-weight: 900; font-size: 1.9rem; letter-spacing: -.01em; text-transform: uppercase; line-height: 1; }
+.vh-word .van { color: #fff; } .vh-word .hero { color: var(--yellow); }
+.vh-road { position: relative; width: min(300px, 72vw); height: 6px; border-radius: 999px; margin-top: .3rem; background: rgba(255, 255, 255, .14); }
+.vh-road::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; transform: translateY(-50%);
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .35) 0 7px, transparent 7px 14px); }
+.vh-road-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--yellow); box-shadow: 0 0 12px rgba(255, 214, 10, .6); }
+.vh-van { position: absolute; top: 50%; transform: translate(-50%, -62%) scaleX(-1); font-size: 1.5rem; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .45)); }
+.vh-pct { font-family: var(--font-body), system-ui; font-weight: 800; color: var(--yellow); font-variant-numeric: tabular-nums; font-size: 1rem; }
+.vh-tag { color: rgba(255, 255, 255, .6); font-size: .82rem; }
+
+.animate-pillpulse { animation: pillpulse 2.4s ease-in-out infinite; }
+.animate-softpulse { animation: softpulse 1.8s infinite; }
+.animate-popin { animation: popIn .5s .9s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
