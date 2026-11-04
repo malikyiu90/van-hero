@@ -5,9 +5,9 @@ import ScrollVan from "@/components/ScrollVan";
 import BackToTop from "@/components/BackToTop";
 
 // Display: Fraunces — a refined optical serif for a premium, editorial headline.
+// Variable font: omit `weight` so the full weight axis loads in one file (robust at build time).
 const display = Fraunces({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "900"],
   style: ["normal", "italic"],
   variable: "--font-display",
   display: "swap",
@@ -16,7 +16,6 @@ const display = Fraunces({
 // Body / UI: Hanken Grotesk — a clean, simple grotesk (not the usual AI default).
 const body = Hanken_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-body",
   display: "swap",
 });
