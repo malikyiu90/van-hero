@@ -18,14 +18,14 @@ export default function Nav() {
   return (
     <>
       {/* top utility bar */}
-      <div className="bg-navy text-white/80 text-[13px]">
-        <div className="mx-auto max-w-wrap px-5 py-[7px] flex items-center gap-4 flex-wrap">
-          <span className="inline-flex items-center gap-1.5 font-display font-bold uppercase tracking-[.1em] text-[11px] text-white">
-            <span className="w-2 h-2 rounded-full bg-brand-yellow animate-softpulse" /> Live in Coventry
+      <div className="bg-navy text-white/80 text-[11px] sm:text-[13px]">
+        <div className="mx-auto max-w-wrap px-4 sm:px-5 py-[7px] flex items-center gap-2 sm:gap-4">
+          <span className="inline-flex items-center gap-1.5 font-display font-bold uppercase tracking-[.08em] sm:tracking-[.1em] text-[10px] sm:text-[11px] text-white whitespace-nowrap">
+            <span className="w-2 h-2 rounded-full bg-brand-yellow animate-softpulse shrink-0" /> Live in Coventry
           </span>
-          <span className="ml-auto flex gap-5">
-            <span>☎ +44 7847 117933</span>
-            <span>Mon–Sat 8–18 · Sun 10–14</span>
+          <span className="ml-auto flex items-center gap-3 sm:gap-5 whitespace-nowrap">
+            <a href="tel:+447847117933" className="hover:text-white">☎ +44 7847 117933</a>
+            <span className="hidden sm:inline">Mon–Sat 8–18 · Sun 10–14</span>
           </span>
         </div>
       </div>
