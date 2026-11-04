@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useCountUp } from "@/lib/useCountUp";
 import { liveJobs } from "@/lib/data";
@@ -59,13 +58,11 @@ export default function Hero() {
     <section id="top" className="relative overflow-hidden bg-herobg">
       {/* desktop: map embedded into the background, bleeding to the right */}
       <div className="hidden lg:block pointer-events-none absolute inset-y-0 right-0 w-[58%] z-[1]">
-        <Image
+        <img
           src="/map.webp"
           alt="Live map of Coventry showing Van Hero coverage"
-          fill
-          sizes="60vw"
-          className="hero-map-mask object-cover"
-          style={{ filter: "saturate(.95) brightness(1.02)" }}
+          className="hero-map-mask h-full w-full object-cover"
+          style={{ filter: "saturate(1) brightness(1.02)" }}
         />
         <div className="absolute inset-x-0 top-0 h-[16%] z-[2]" style={{ background: "linear-gradient(to bottom, var(--herobg), rgba(238,241,251,0))" }} />
         <div className="absolute inset-x-0 bottom-0 h-[32%] z-[2]" style={{ background: "linear-gradient(to top, var(--herobg) 2%, rgba(238,241,251,0))" }} />
@@ -111,7 +108,7 @@ export default function Hero() {
 
         {/* mobile: map as a clean card below the text */}
         <div className="lg:hidden relative w-full h-[300px] rounded-2xl overflow-hidden shadow-[0_20px_44px_-24px_rgba(11,27,74,.55)]">
-          <Image src="/map.webp" alt="Live map of Coventry showing Van Hero coverage" fill sizes="100vw" className="object-cover" />
+          <img src="/map.webp" alt="Live map of Coventry showing Van Hero coverage" className="h-full w-full object-cover" />
           <MapOverlays job={job} shown={shown} onClose={() => setShown(false)} variant="mobile" />
         </div>
       </div>

@@ -1,8 +1,6 @@
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import Loader from "@/components/Loader";
-import ScrollVan from "@/components/ScrollVan";
-import BackToTop from "@/components/BackToTop";
 
 // Display: Fraunces — a refined optical serif for a premium, editorial headline.
 // Variable font: omit `weight` so the full weight axis loads in one file (robust at build time).
@@ -31,9 +29,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="font-body antialiased">
         <Loader />
-        <ScrollVan />
         {children}
-        <BackToTop />
       </body>
     </html>
   );
