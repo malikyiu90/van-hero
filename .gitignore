@@ -38,6 +38,7 @@ yarn-error.log*
 /final-*.png
 /m-*.png
 /d-*.png
+/loader.png
 /vanhero-full.png
 # duplicate source assets (the app uses /public copies)
 /logo.webp
