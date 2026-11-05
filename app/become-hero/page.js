@@ -77,7 +77,16 @@ export default function BecomeHeroPage() {
             <p className="text-muted mt-6 text-[.95rem] leading-relaxed">Sound like you? Send us your details and we'll be in touch about getting you on the road with Van Hero.</p>
           </div>
           <div className="lg:sticky lg:top-24">
-            <ManVanForm pill="★ Become a Hero" title="Apply to Drive with Us" subtitle="Tell us a little about you and your van." />
+            <ManVanForm
+              pill="★ Become a Hero"
+              title="Apply to Drive with Us"
+              subtitle="Tell us a little about you and your van."
+              cta="Become a Hero →"
+              lastLabel="Tell us about your van & experience"
+              lastPlaceholder="e.g. LWB Transit, 3 years man & van experience, available weekends…"
+              sentTitle="Thanks — application received!"
+              sentText="Our team will review your details and get back to you about driving with Van Hero."
+            />
           </div>
         </div>
       </section>

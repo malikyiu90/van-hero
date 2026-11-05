@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useCountUp } from "@/lib/useCountUp";
 import { liveJobs } from "@/lib/data";
+import LiveMap from "@/components/LiveMap";
 
 function Stat({ to, suffix, label }) {
   const [ref, value] = useCountUp(to, { immediate: true });
@@ -20,11 +21,6 @@ function MapOverlays({ job, shown, onClose, variant }) {
   const desktop = variant === "desktop";
   return (
     <>
-      <span className="car c1" aria-hidden>🚚</span>
-      <span className="car c2" aria-hidden>🚐</span>
-      <span className="pin" style={{ top: "30%", left: "52%" }} />
-      <span className="pin green" style={{ top: "62%", left: "78%" }} />
-
       <div className={`absolute z-[4] flex items-center gap-2 bg-white rounded-xl px-3 py-2 shadow-[0_8px_20px_rgba(11,27,74,.16)] ${desktop ? "top-[10%] left-[42%] right-[18px]" : "top-3 left-3 right-3"}`}>
         <span className="w-[9px] h-[9px] rounded-full bg-dot animate-softpulse" />
         <b className="font-body font-bold text-ink text-[.78rem] uppercase tracking-wide">Live in Coventry</b>
@@ -58,12 +54,7 @@ export default function Hero() {
     <section id="top" className="relative overflow-hidden bg-herobg">
       {/* desktop: map embedded into the background, bleeding to the right */}
       <div className="hidden lg:block pointer-events-none absolute inset-y-0 right-0 w-[58%] z-[1]">
-        <img
-          src="/map.webp"
-          alt="Live map of Coventry showing Van Hero coverage"
-          className="hero-map-mask h-full w-full object-cover"
-          style={{ filter: "saturate(1) brightness(1.02)" }}
-        />
+        <LiveMap className="block h-full w-full" />
         <div className="absolute inset-x-0 top-0 h-[16%] z-[2]" style={{ background: "linear-gradient(to bottom, var(--herobg), rgba(238,241,251,0))" }} />
         <div className="absolute inset-x-0 bottom-0 h-[32%] z-[2]" style={{ background: "linear-gradient(to top, var(--herobg) 2%, rgba(238,241,251,0))" }} />
         <div className="pointer-events-auto absolute inset-0">
@@ -107,8 +98,8 @@ export default function Hero() {
         </div>
 
         {/* mobile: map as a clean card below the text */}
-        <div className="lg:hidden relative w-full h-[300px] rounded-2xl overflow-hidden shadow-[0_20px_44px_-24px_rgba(11,27,74,.55)]">
-          <img src="/map.webp" alt="Live map of Coventry showing Van Hero coverage" className="h-full w-full object-cover" />
+        <div className="lg:hidden relative w-full h-[320px] rounded-2xl overflow-hidden shadow-[0_20px_44px_-24px_rgba(11,27,74,.55)]">
+          <LiveMap className="absolute inset-0 h-full w-full" />
           <MapOverlays job={job} shown={shown} onClose={() => setShown(false)} variant="mobile" />
         </div>
       </div>
