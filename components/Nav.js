@@ -90,24 +90,14 @@ export default function Nav() {
           <nav className="lg:hidden border-t border-line bg-white px-5 py-3 flex flex-col gap-1 font-semibold">
             {links.map((l) =>
               l.label.startsWith("Services") ? (
-                <div key="services">
-                  <button
-                    onClick={() => setSvcOpen((v) => !v)}
-                    aria-expanded={svcOpen}
-                    className="w-full flex items-center justify-between py-2 text-brand-navlink"
-                  >
-                    <span>Services</span>
-                    <span className={`text-ink transition-transform ${svcOpen ? "rotate-180" : ""}`}>▾</span>
-                  </button>
-                  {svcOpen && (
-                    <div className="ml-1 pl-3 border-l-2 border-line flex flex-col pb-1">
-                      <a href="/services" className="py-1.5 text-ink text-[.9rem]" onClick={close}>All Services</a>
-                      {serviceList.map((s) => (
-                        <a key={s.slug} href={s.slug} className="py-1.5 text-muted text-[.9rem]" onClick={close}>{s.title}</a>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <button
+                  key="services"
+                  onClick={() => setSvcOpen(true)}
+                  className="w-full flex items-center justify-between py-2 text-brand-navlink"
+                >
+                  <span>Services</span>
+                  <span className="text-ink text-[1.2em]">›</span>
+                </button>
               ) : (
                 <a key={l.label} href={l.href} className="py-2 text-brand-navlink" onClick={close}>
                   {l.label}
@@ -120,6 +110,33 @@ export default function Nav() {
           </nav>
         )}
       </header>
+
+      {/* mobile Services sidebar drawer */}
+      <div className={`lg:hidden fixed inset-0 z-[70] transition-opacity duration-200 ${svcOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+        {/* backdrop */}
+        <div className="absolute inset-0 bg-ink/40 backdrop-blur-[2px]" onClick={() => setSvcOpen(false)} />
+        {/* drawer */}
+        <aside className={`absolute top-0 right-0 h-full w-[86%] max-w-[360px] bg-white shadow-[0_0_60px_rgba(11,27,74,.35)] flex flex-col transition-transform duration-300 ${svcOpen ? "translate-x-0" : "translate-x-full"}`}>
+          <div className="flex items-center gap-3 px-5 h-16 border-b border-line shrink-0">
+            <span className="font-display text-ink text-[1.2rem]">Our Services</span>
+            <button onClick={() => setSvcOpen(false)} aria-label="Close" className="ml-auto w-10 h-10 -mr-2 rounded-full grid place-items-center text-muted text-[1.4rem]">✕</button>
+          </div>
+          <div className="flex-1 overflow-y-auto px-3.5 py-3.5">
+            <a href="/services" onClick={close} className="flex items-center justify-between mb-2.5 px-4 py-3 rounded-xl bg-ink text-white font-display text-[.95rem]">
+              <span>View All Services</span><span>→</span>
+            </a>
+            <div className="flex flex-col gap-1.5">
+              {serviceList.map((s) => (
+                <a key={s.slug} href={s.slug} onClick={close} className="flex items-center gap-3 px-2.5 py-2.5 rounded-xl hover:bg-soft active:bg-soft transition">
+                  <span className="w-10 h-10 shrink-0 rounded-xl bg-softblue grid place-items-center text-[1.2rem]">{s.icon}</span>
+                  <span className="text-ink font-semibold text-[.95rem] leading-tight">{s.title}</span>
+                  <span className="ml-auto text-muted2">›</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
     </>
   );
 }
