@@ -20,8 +20,8 @@ function MapOverlays({ job, shown, onClose, variant }) {
   const desktop = variant === "desktop";
   return (
     <>
-      <span className="car c1" aria-hidden>🚐</span>
-      <span className="car c2" aria-hidden>🚗</span>
+      <span className="car c1" aria-hidden>🚚</span>
+      <span className="car c2" aria-hidden>🚐</span>
       <span className="pin" style={{ top: "30%", left: "52%" }} />
       <span className="pin green" style={{ top: "62%", left: "78%" }} />
 
