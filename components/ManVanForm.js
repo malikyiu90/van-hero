@@ -1,7 +1,11 @@
 "use client";
 import { useState } from "react";
 
-export default function ManVanForm() {
+export default function ManVanForm({
+  pill = "★ Man with Van",
+  title = "Help for any small move, Starts From £25.",
+  subtitle = "Single items to half-house moves.",
+}) {
   const [sent, setSent] = useState(false);
   const field = "w-full px-3.5 py-2.5 border border-line rounded-xl bg-white text-ink text-[.92rem] focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow transition";
   const lab = "block text-[.82rem] font-semibold text-ink mb-1.5";
@@ -18,9 +22,9 @@ export default function ManVanForm() {
 
   return (
     <div className="bg-white rounded-2xl p-5 shadow-[0_24px_50px_-30px_rgba(0,0,0,.5)] border border-line">
-      <span className="pill text-[.68rem]">★ Man with Van</span>
-      <h3 className="font-display font-bold text-brand-blue text-[1.3rem] mt-3 leading-tight">Help for any small move, Starts From £25.</h3>
-      <p className="text-muted text-[.86rem] mt-1 mb-4">Single items to half-house moves.</p>
+      <span className="pill text-[.68rem]">{pill}</span>
+      <h3 className="font-display font-bold text-brand-blue text-[1.3rem] mt-3 leading-tight">{title}</h3>
+      <p className="text-muted text-[.86rem] mt-1 mb-4">{subtitle}</p>
       <form className="flex flex-col gap-3" onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
         <div><label className={lab}>Full Name</label><input className={field} placeholder="Enter your name" required /></div>
         <div><label className={lab}>Phone Number (UK)</label><input className={field} placeholder="07123 456 789" inputMode="tel" required /><span className="text-[.72rem] text-muted">UK mobile or landline</span></div>
