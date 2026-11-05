@@ -1,6 +1,7 @@
 import { Bricolage_Grotesque, Inter } from "next/font/google";
 import "./globals.css";
 import Loader from "@/components/Loader";
+import FloatingContact from "@/components/FloatingContact";
 
 // Display: Bricolage Grotesque — the exact bold grotesque headline used on
 // vanhero.online. Variable font: omit `weight` (avoids Vercel next/font build error).
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
       <body className="font-body antialiased">
         <Loader />
         {children}
+        <FloatingContact />
       </body>
     </html>
   );
