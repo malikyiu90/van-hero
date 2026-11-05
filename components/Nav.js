@@ -3,7 +3,7 @@ import { useState } from "react";
 import Logo from "@/components/Logo";
 
 const links = [
-  { label: "Home", href: "#top", active: true },
+  { label: "Home", href: "/", active: true },
   { label: "Services ▾", href: "#services" },
   { label: "About", href: "#about" },
   { label: "Blogs", href: "#blog" },
@@ -33,7 +33,7 @@ export default function Nav() {
       {/* nav */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-line">
         <div className="mx-auto max-w-wrap px-5 py-3 flex items-center gap-5">
-          <a href="#top" className="inline-flex items-center shrink-0" aria-label="Van Hero home">
+          <a href="/" className="inline-flex items-center shrink-0" aria-label="Van Hero home">
             <Logo tone="light" />
           </a>
 
