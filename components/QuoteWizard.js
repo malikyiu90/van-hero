@@ -79,7 +79,7 @@ export default function QuoteWizard() {
     if (mapObj.current) { mapObj.current.remove(); mapObj.current = null; }
     const map = L.map(mapRef.current, { scrollWheelZoom: false, attributionControl: false });
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-    const yellow = L.divIcon({ className: "", html: '<div style="width:16px;height:16px;border-radius:50%;background:#ffd60a;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4)"></div>', iconSize: [16, 16] });
+    const yellow = L.divIcon({ className: "", html: '<div style="width:16px;height:16px;border-radius:50%;background:#ffd41c;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4)"></div>', iconSize: [16, 16] });
     const green = L.divIcon({ className: "", html: '<div style="width:16px;height:16px;border-radius:50%;background:#10b981;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4)"></div>', iconSize: [16, 16] });
     const p1 = [coords.a.lat, coords.a.lon], p2 = [coords.b.lat, coords.b.lon];
     L.marker(p1, { icon: yellow }).addTo(map);

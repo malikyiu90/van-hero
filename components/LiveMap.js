@@ -54,7 +54,7 @@ export default function LiveMap({ className = "" }) {
 
     // --- routes along the artwork's yellow roads ---
     const ROUTES = [
-      { crew: "Crew A", color: "#FFD60A", speed: 30, stops: [
+      { crew: "Crew A", color: "#FFD41C", speed: 30, stops: [
         { name: "Allesley", x: 0, y: 365 },
         { x: 160, y: 392 },
         { name: "Coundon", x: 355, y: 428 },
@@ -62,7 +62,7 @@ export default function LiveMap({ className = "" }) {
         { name: "City Centre", x: 760, y: 442 },
         { x: 960, y: 410 },
       ]},
-      { crew: "Crew B", color: "#FFD60A", speed: 34, stops: [
+      { crew: "Crew B", color: "#FFD41C", speed: 34, stops: [
         { name: "Radford", x: 1005, y: 0 },
         { x: 1014, y: 110 },
         { name: "Coventry Cathedral", x: 1040, y: 230 },
@@ -70,7 +70,7 @@ export default function LiveMap({ className = "" }) {
         { name: "City Centre", x: 980, y: 455 },
         { x: 930, y: 520 },
       ]},
-      { crew: "Crew C", color: "#FFD60A", speed: 32, stops: [
+      { crew: "Crew C", color: "#FFD41C", speed: 32, stops: [
         { name: "Whitley", x: 480, y: 940 },
         { x: 565, y: 880 },
         { name: "Cheylesmore", x: 650, y: 820 },

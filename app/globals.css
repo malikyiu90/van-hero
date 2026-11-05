@@ -5,9 +5,9 @@
 :root {
   --herobg: #eef2ff;
   --dot: #10b981;
-  --yellow: #ffd60a;
-  --ink: #0b1f4a;
-  --royal: #0a2a8f;
+  --yellow: #ffd41c;
+  --ink: #040542;
+  --royal: #002497;
 }
 
 html { scroll-behavior: smooth; }

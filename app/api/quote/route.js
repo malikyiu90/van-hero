@@ -110,7 +110,7 @@ async function sendEmails({ lead, quote, breakdown, miles }) {
 
   const rows = breakdown.map((b) => `<tr><td style="padding:4px 10px">${b.label}</td><td style="padding:4px 10px;text-align:right">£${b.amount}</td></tr>`).join("");
   const leadHtml = `
-    <div style="font-family:Arial,sans-serif;color:#0b1b4a">
+    <div style="font-family:Arial,sans-serif;color:#040542">
       <h2>New Quote Request — £${quote}</h2>
       <p><strong>${lead.name || "—"}</strong> · ${lead.phone || "—"} · ${lead.email || "—"}</p>
       <p>From <strong>${lead.pickup?.postcode || "—"}</strong> (${lead.pickup?.size || lead.pickup?.type || "—"})
@@ -132,7 +132,7 @@ async function sendEmails({ lead, quote, breakdown, miles }) {
   const results = [];
   results.push(await send({ from, to, subject: `New quote £${quote} — ${lead.name || "Website lead"}`, html: leadHtml }));
   if (lead.email) {
-    const custHtml = `<div style="font-family:Arial,sans-serif;color:#0b1b4a"><h2>Thanks${lead.name ? `, ${lead.name}` : ""}! 🚐</h2>
+    const custHtml = `<div style="font-family:Arial,sans-serif;color:#040542"><h2>Thanks${lead.name ? `, ${lead.name}` : ""}! 🚐</h2>
       <p>Your Van Hero quote request has been received. Your estimated guide price is <strong>£${quote}</strong>.</p>
       <p>A Van Hero will be in touch shortly to confirm the details. Need us sooner? Call <strong>+44 7847 117933</strong>.</p></div>`;
     results.push(await send({ from, to: lead.email, subject: "Your Van Hero quote has been booked", html: custHtml }));

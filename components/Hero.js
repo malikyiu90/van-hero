@@ -68,8 +68,8 @@ export default function Hero() {
           <span className="pill fade-up">
             <span className="w-[7px] h-[7px] rounded-full bg-ink" /> Coventry · Live
           </span>
-          <h1 className="fade-up font-display font-black text-ink leading-[1.04] tracking-[-0.02em] mt-5 text-[clamp(2.4rem,9vw,4rem)]" style={{ animationDelay: ".14s" }}>
-            Van Hero is <em className="italic font-semibold">Moving</em> Coventry Right{" "}
+          <h1 className="fade-up font-display font-extrabold text-ink leading-[1.055] tracking-[-0.02em] mt-5 text-[clamp(2.4rem,9vw,3.5rem)]" style={{ animationDelay: ".14s" }}>
+            Van Hero is Moving Coventry Right{" "}
             <span className="whitespace-nowrap">Now<span className="gdot-big" /></span>
           </h1>
           <p className="fade-up mt-4 text-[1rem] sm:text-[1.05rem] max-w-[42ch]" style={{ animationDelay: ".23s" }}>

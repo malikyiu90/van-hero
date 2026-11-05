@@ -7,14 +7,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // vanhero.online scheme: navy + yellow + royal blue + white
-        navy: "#0b1f4a",
-        ink: "#0b1f4a",
+        // Official VANHERO logo palette (same as vanhero.online)
+        navy: "#040542",        // deep navy — "VAN" / primary text
+        ink: "#040542",
         brand: {
-          yellow: "#ffd60a",
-          blue: "#0a2a8f",      // royal blue (How It Works cards, accents)
-          bluelight: "#1e52c8",
-          navlink: "#0b1f4a",   // nav links are navy on the live site
+          yellow: "#ffd41c",    // badge yellow
+          blue: "#002497",      // royal blue — "HERO" / links / accents
+          bluelight: "#012499",
+          navlink: "#040542",   // nav links = deep navy
         },
         herobg: "#eef2ff",
         muted: "#606d9a",

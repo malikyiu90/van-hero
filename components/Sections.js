@@ -9,7 +9,7 @@ function Pill({ children }) {
 
 const accents = [
   { c: "#002496", tint: "#e7ecfb", fg: "#002496" }, // House Removals — blue
-  { c: "#0b1b4a", tint: "#e6e8f2", fg: "#0b1b4a" }, // Office — navy
+  { c: "#040542", tint: "#e6e8f2", fg: "#040542" }, // Office — navy
   { c: "#e0a500", tint: "#fff3cf", fg: "#8a6500" }, // Man & Van — amber
   { c: "#10b981", tint: "#d9f5ea", fg: "#0a7f58" }, // Recycling — green
   { c: "#3993d5", tint: "#e2f0fb", fg: "#1f6fa8" }, // Storage — sky
