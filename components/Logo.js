@@ -1,15 +1,25 @@
-export default function Logo({ tone = "light", className = "" }) {
-  // tone "light" = on a light background (VAN navy); "dark" = on a dark background (VAN white)
-  const van = tone === "dark" ? "#ffffff" : "#0b1b4a";
+export default function Logo({ tone = "light", className = "h-12 w-auto" }) {
+  // "VAN" is navy on light backgrounds, white on dark (footer); tagline dims on dark.
+  const van = tone === "dark" ? "#FFFFFF" : "#0B1B4A";
+  const sub = tone === "dark" ? "rgba(255,255,255,0.6)" : "#5F6B7D";
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <span className="grid place-items-center w-10 h-10 rounded-[10px] bg-brand-yellow shadow-sm">
-        <span className="font-body font-black text-navy text-[1.15rem] leading-none tracking-tight">VH</span>
-      </span>
-      <span className="font-body font-black uppercase text-[1.4rem] leading-none tracking-[-0.01em]">
-        <span style={{ color: van }}>VAN</span>
-        <span className="text-brand-yellow">HERO</span>
-      </span>
-    </span>
+    <svg viewBox="0 0 720 220" className={className} role="img" aria-label="Van Hero — powered by VMT Removals">
+      {/* VH badge */}
+      <rect x="25" y="20" width="180" height="180" rx="36" ry="36" fill="#FFC400" stroke="#0B1B4A" strokeWidth="8" />
+      {/* V */}
+      <polygon points="46,54 65,54 77,106 89,54 108,54 77,152" fill="#0B1B4A" />
+      {/* H */}
+      <path d="M 118,54 L 140,54 L 140,90 L 160,90 L 160,54 L 182,54 L 182,136 L 160,136 L 160,106 L 140,106 L 140,136 L 118,136 Z" fill="#0B1B4A" />
+      {/* wordmark */}
+      <g transform="skewX(-11)">
+        <text x="260" y="132" fontFamily="system-ui, -apple-system, 'Arial Black', 'Montserrat', 'Segoe UI Black', sans-serif" fontWeight="900" fontSize="78" letterSpacing="-1">
+          <tspan fill={van}>VAN</tspan><tspan fill="#FFC400">HERO</tspan>
+        </text>
+      </g>
+      {/* tagline */}
+      <text x="236" y="170" fontFamily="system-ui, -apple-system, 'Montserrat', 'Arial', sans-serif" fontWeight="800" fontSize="18.5" letterSpacing="4.8" fill={sub}>
+        POWERED BY VMT REMOVALS
+      </text>
+    </svg>
   );
 }
