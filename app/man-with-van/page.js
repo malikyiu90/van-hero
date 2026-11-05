@@ -204,7 +204,7 @@ export default function ManWithVanPage() {
           <h2 className="font-display font-black text-ink text-[clamp(1.8rem,4vw,2.5rem)] text-center">Moving &amp; Packing Tips</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
             {posts.map((p) => (
-              <a key={p.title} href={p.link} target="_blank" rel="noopener noreferrer" className="group bg-white border border-line rounded-2xl overflow-hidden flex flex-col hover:-translate-y-1.5 hover:shadow-[0_26px_50px_-30px_rgba(3,5,65,.45)] transition duration-300">
+              <a key={p.title} href={p.link} className="group bg-white border border-line rounded-2xl overflow-hidden flex flex-col hover:-translate-y-1.5 hover:shadow-[0_26px_50px_-30px_rgba(3,5,65,.45)] transition duration-300">
                 <div className="relative h-[190px] overflow-hidden">
                   <Image src={p.img} alt={p.title} fill sizes="(max-width:1024px) 100vw, 33vw" className="object-cover transition duration-500 group-hover:scale-105" />
                 </div>

@@ -60,11 +60,11 @@ export function Ecosystem() {
                 <p className="text-[.92rem] text-muted leading-relaxed">{e.text}</p>
 
                 <a
-                  href="#quote"
+                  href={e.href}
                   className="mt-auto pt-2 inline-flex items-center gap-1.5 font-semibold text-[.88rem]"
                   style={{ color: a.fg }}
                 >
-                  Get a quote
+                  View service
                   <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </a>
               </article>
@@ -97,7 +97,7 @@ export function Services() {
               <div className="p-6 flex flex-col gap-2 flex-1">
                 <h3 className="font-display font-bold text-ink text-[1.3rem]">{s.title}</h3>
                 <p className="text-[.92rem] text-muted leading-relaxed">{s.text}</p>
-                <a href="#quote" className="mt-auto pt-2 inline-flex items-center gap-1.5 text-brand-blue font-display font-bold text-[.82rem] uppercase tracking-wide">
+                <a href={s.href} className="mt-auto pt-2 inline-flex items-center gap-1.5 text-brand-blue font-display font-bold text-[.82rem] uppercase tracking-wide">
                   Learn More <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </a>
               </div>
@@ -253,7 +253,7 @@ export function Blog() {
             </h2>
             <p className="mt-2 text-[1.02rem] text-muted">Practical, no-nonsense moving advice from the crew who does it every day.</p>
           </div>
-          <a href="https://vanhero.online/blogs/" target="_blank" rel="noopener noreferrer" className="hidden sm:inline-flex items-center gap-2 border-2 border-ink text-ink font-display font-bold px-5 py-2.5 rounded-xl hover:bg-ink hover:text-white transition">
+          <a href="/blogs" className="hidden sm:inline-flex items-center gap-2 border-2 border-ink text-ink font-display font-bold px-5 py-2.5 rounded-xl hover:bg-ink hover:text-white transition">
             View all articles →
           </a>
         </div>
@@ -263,8 +263,6 @@ export function Blog() {
             <a
               key={p.title}
               href={p.link}
-              target="_blank"
-              rel="noopener noreferrer"
               className="group bg-white border border-line rounded-2xl overflow-hidden flex flex-col hover:-translate-y-1.5 hover:shadow-[0_26px_50px_-30px_rgba(3,5,65,.45)] transition duration-300"
             >
               <div className="relative h-[200px] overflow-hidden">
