@@ -43,3 +43,8 @@ yarn-error.log*
 # duplicate source assets (the app uses /public copies)
 /logo.webp
 /map.webp
+
+# quote-build reference files
+/vmt-ref/
+/*.xlsx
+/prod-check.png
