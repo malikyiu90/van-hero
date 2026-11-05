@@ -1,11 +1,11 @@
-import { Fraunces, Hanken_Grotesk } from "next/font/google";
+import { DM_Serif_Display, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import Loader from "@/components/Loader";
 
-// Display: Fraunces — a refined optical serif for a premium, editorial headline.
-// Variable font: omit `weight` so the full weight axis loads in one file (robust at build time).
-const display = Fraunces({
+// Display: DM Serif Display — a bold, high-impact luxury serif for striking headlines.
+const display = DM_Serif_Display({
   subsets: ["latin"],
+  weight: ["400"],
   style: ["normal", "italic"],
   variable: "--font-display",
   display: "swap",

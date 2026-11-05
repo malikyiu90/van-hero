@@ -7,19 +7,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        navy: "#030541",
+        navy: "#0b1b4a",
         ink: "#0b1b4a",
         brand: {
-          yellow: "#ffd60a",
-          blue: "#002496",
-          bluelight: "#3993d5",
-          navlink: "#0f42b3",
+          yellow: "#ffc400",
+          blue: "#2563eb",
+          bluelight: "#3b82f6",
+          navlink: "#2563eb",
         },
-        herobg: "#eef1fb",
-        muted: "#606d9a",
-        muted2: "#5a6478",
+        herobg: "#f3f6fb",
+        muted: "#5a6478",
+        muted2: "#6b7488",
         soft: "#f7f9fc",
-        softblue: "#eaf6ff",
+        softblue: "#f5f8fc",
         line: "#e6ebf3",
         whatsapp: "#25d366",
         dot: "#10b981",
