@@ -26,7 +26,7 @@ export default function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.7fr_1fr_1fr_1.2fr]">
           {/* brand */}
           <div>
-            <Logo tone="dark" />
+            <Logo tone="dark" className="h-16 w-auto" />
             <p className="mt-4 max-w-[34ch] text-[.92rem] leading-relaxed">
               Coventry&apos;s trusted movers since 2020. Precision logistics for a stress-free move.
             </p>

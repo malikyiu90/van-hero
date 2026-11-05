@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Logo from "@/components/Logo";
+import { serviceList } from "@/lib/serviceList";
 
 const links = [
   { label: "Home", href: "/", active: true },
@@ -14,6 +15,8 @@ const links = [
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
+  const [svcOpen, setSvcOpen] = useState(false);
+  const close = () => { setOpen(false); setSvcOpen(false); };
 
   return (
     <>
@@ -34,19 +37,37 @@ export default function Nav() {
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-line">
         <div className="mx-auto max-w-wrap px-5 py-3 flex items-center gap-5">
           <a href="/" className="inline-flex items-center shrink-0" aria-label="Van Hero home">
-            <Logo tone="light" />
+            <Logo tone="light" className="h-14 w-auto" />
           </a>
 
           <nav className="ml-auto hidden lg:flex gap-6 font-semibold text-[15px] items-center">
-            {links.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
-                className={l.active ? "text-[#111] font-bold" : "text-brand-navlink hover:text-ink"}
-              >
-                {l.label}
-              </a>
-            ))}
+            {links.map((l) =>
+              l.label.startsWith("Services") ? (
+                <div key="services" className="relative group">
+                  <a href="/services" className="text-brand-navlink hover:text-ink inline-flex items-center gap-1">
+                    Services <span className="text-[.65em] transition-transform group-hover:rotate-180">▾</span>
+                  </a>
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-4 hidden group-hover:block z-50">
+                    <div className="bg-white rounded-2xl shadow-[0_24px_60px_-20px_rgba(11,27,74,.45)] border border-line p-2.5 w-[540px] grid grid-cols-2 gap-1">
+                      {serviceList.map((s) => (
+                        <a key={s.slug} href={s.slug} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-soft transition">
+                          <span className="w-9 h-9 shrink-0 rounded-lg bg-softblue grid place-items-center text-[1.1rem]">{s.icon}</span>
+                          <span className="text-ink font-semibold text-[.9rem]">{s.title}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  className={l.active ? "text-[#111] font-bold" : "text-brand-navlink hover:text-ink"}
+                >
+                  {l.label}
+                </a>
+              )
+            )}
           </nav>
 
           <a
@@ -66,13 +87,34 @@ export default function Nav() {
         </div>
 
         {open && (
-          <nav className="lg:hidden border-t border-line bg-white px-5 py-3 flex flex-col gap-2 font-semibold">
-            {links.map((l) => (
-              <a key={l.label} href={l.href} className="py-1 text-brand-navlink" onClick={() => setOpen(false)}>
-                {l.label}
-              </a>
-            ))}
-            <a href="#quote" className="mt-2 inline-flex justify-center bg-ink text-white rounded-full py-2 font-display" onClick={() => setOpen(false)}>
+          <nav className="lg:hidden border-t border-line bg-white px-5 py-3 flex flex-col gap-1 font-semibold">
+            {links.map((l) =>
+              l.label.startsWith("Services") ? (
+                <div key="services">
+                  <button
+                    onClick={() => setSvcOpen((v) => !v)}
+                    aria-expanded={svcOpen}
+                    className="w-full flex items-center justify-between py-2 text-brand-navlink"
+                  >
+                    <span>Services</span>
+                    <span className={`text-ink transition-transform ${svcOpen ? "rotate-180" : ""}`}>▾</span>
+                  </button>
+                  {svcOpen && (
+                    <div className="ml-1 pl-3 border-l-2 border-line flex flex-col pb-1">
+                      <a href="/services" className="py-1.5 text-ink text-[.9rem]" onClick={close}>All Services</a>
+                      {serviceList.map((s) => (
+                        <a key={s.slug} href={s.slug} className="py-1.5 text-muted text-[.9rem]" onClick={close}>{s.title}</a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <a key={l.label} href={l.href} className="py-2 text-brand-navlink" onClick={close}>
+                  {l.label}
+                </a>
+              )
+            )}
+            <a href="#quote" className="mt-2 inline-flex justify-center bg-ink text-white rounded-full py-2 font-display" onClick={close}>
               Get In Touch ↗
             </a>
           </nav>

@@ -1,7 +1,7 @@
 export default function Logo({ tone = "light", className = "h-12 w-auto" }) {
   // "VAN" is navy on light backgrounds, white on dark (footer); tagline dims on dark.
   const van = tone === "dark" ? "#FFFFFF" : "#0B1B4A";
-  const sub = tone === "dark" ? "rgba(255,255,255,0.6)" : "#5F6B7D";
+  const sub = tone === "dark" ? "rgba(255,255,255,0.78)" : "#334155";
   return (
     <svg viewBox="0 0 720 220" className={className} role="img" aria-label="Van Hero — powered by VMT Removals">
       {/* VH badge */}
@@ -17,7 +17,7 @@ export default function Logo({ tone = "light", className = "h-12 w-auto" }) {
         </text>
       </g>
       {/* tagline */}
-      <text x="236" y="170" fontFamily="system-ui, -apple-system, 'Montserrat', 'Arial', sans-serif" fontWeight="800" fontSize="18.5" letterSpacing="4.8" fill={sub}>
+      <text x="238" y="174" fontFamily="system-ui, -apple-system, 'Montserrat', 'Arial', sans-serif" fontWeight="800" fontSize="23" letterSpacing="3.4" fill={sub}>
         POWERED BY VMT REMOVALS
       </text>
     </svg>
