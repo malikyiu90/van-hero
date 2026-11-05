@@ -4,12 +4,12 @@ import Logo from "@/components/Logo";
 
 const links = [
   { label: "Home", href: "/", active: true },
-  { label: "Services ▾", href: "#services" },
-  { label: "About", href: "#about" },
-  { label: "Blogs", href: "#blog" },
-  { label: "Become Hero", href: "#become" },
-  { label: "FAQ", href: "#faq" },
-  { label: "Contact", href: "#contact" },
+  { label: "Services ▾", href: "/services" },
+  { label: "About", href: "/about" },
+  { label: "Blogs", href: "/blogs" },
+  { label: "Become Hero", href: "/become-hero" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Nav() {
