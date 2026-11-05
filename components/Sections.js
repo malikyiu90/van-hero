@@ -176,7 +176,7 @@ export function Areas() {
           </p>
           <div className="mt-7 grid grid-cols-2 gap-x-6 gap-y-1">
             {areas.map((a) => (
-              <a key={a} href="#quote" className="flex items-center gap-2.5 py-1.5 text-ink font-semibold text-[.92rem] hover:text-brand-blue transition">
+              <a key={a} href="#quote" className="flex items-center gap-2.5 py-2 text-ink font-semibold text-[.92rem] hover:text-brand-blue transition">
                 <NavArrow /> {a}
               </a>
             ))}

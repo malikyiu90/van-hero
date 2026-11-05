@@ -4,6 +4,7 @@ import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import Testimonials from "@/components/Testimonials";
 import ManVanForm from "@/components/ManVanForm";
+import { HowItWorks } from "@/components/Sections";
 import { posts, areas } from "@/lib/data";
 
 export const metadata = {
@@ -25,12 +26,6 @@ const pricing = [
   { size: "Small Load", price: "£65", van: "Luton Van", crew: "2 Men" },
   { size: "Studio / 1-Bed", price: "£85", van: "Extra Large Luton", crew: "2 Men" },
   { size: "2-Bed Home", price: "£110", van: "2 x Luton Vans", crew: "3 Men" },
-];
-
-const steps = [
-  { n: "01", title: "Get a Quote", text: "Fill in our quick form or give us a call. Tell us what you're moving and where it's going, and we'll provide a tailored, no-obligation quote." },
-  { n: "02", title: "Pick Your Slot", text: "Pick a date and time that works for you. We offer flexible appointments, including same-day and weekend availability where possible." },
-  { n: "03", title: "Move Complete", text: "Our experienced team arrives on time, carefully loads and transports your belongings, and gets the job done with no stress and no hassle." },
 ];
 
 const faqs = [
@@ -160,23 +155,8 @@ export default function ManWithVanPage() {
         </div>
       </section>
 
-      {/* how it works */}
-      <section className="pb-16 md:pb-20">
-        <div className="mx-auto max-w-wrap px-5">
-          <div className="bg-softblue rounded-3xl px-6 py-12 md:py-14">
-            <h2 className="font-display font-black text-ink text-[clamp(1.8rem,4vw,2.5rem)] text-center">How It Works</h2>
-            <div className="grid sm:grid-cols-3 gap-8 mt-10 max-w-[900px] mx-auto">
-              {steps.map((s) => (
-                <div key={s.n} className="text-center">
-                  <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-brand-yellow text-ink font-display font-black text-[1.3rem] grid place-items-center ring-8 ring-white">{s.n}</div>
-                  <h3 className="font-display font-bold text-ink text-[1.15rem]">{s.title}</h3>
-                  <p className="text-[.9rem] text-muted mt-2 leading-relaxed">{s.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* how it works — shared 4-step design */}
+      <HowItWorks />
 
       {/* FAQ */}
       <section className="bg-softblue py-16 md:py-20">

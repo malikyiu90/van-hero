@@ -55,7 +55,7 @@ export default function Footer() {
           <div>
             <h4 className="font-display text-brand-yellow text-[.8rem] uppercase tracking-wide mb-4">Services</h4>
             <ul className="flex flex-col gap-2.5">
-              {svc.map((s) => <li key={s.label}><a href={s.href} className="text-[.92rem] hover:text-white transition">{s.label}</a></li>)}
+              {svc.map((s) => <li key={s.label}><a href={s.href} className="inline-block py-1 text-[.92rem] hover:text-white transition">{s.label}</a></li>)}
             </ul>
           </div>
 
@@ -63,7 +63,7 @@ export default function Footer() {
           <div>
             <h4 className="font-display text-brand-yellow text-[.8rem] uppercase tracking-wide mb-4">Areas</h4>
             <ul className="flex flex-col gap-2.5">
-              {area.map((a) => <li key={a}><a href="/#areas" className="text-[.92rem] hover:text-white transition">{a}</a></li>)}
+              {area.map((a) => <li key={a}><a href="/#areas" className="inline-block py-1 text-[.92rem] hover:text-white transition">{a}</a></li>)}
             </ul>
           </div>
 
@@ -83,11 +83,11 @@ export default function Footer() {
 
         <div className="mt-10 pt-6 border-t border-white/15 flex flex-col sm:flex-row justify-between gap-4 text-[.8rem] text-white/55">
           <div>© {new Date().getFullYear()} Van Hero Logistics Limited. All rights reserved.</div>
-          <div className="flex flex-wrap gap-x-5 gap-y-2">
-            <a href="/terms-conditions" className="hover:text-white transition">Terms &amp; Conditions</a>
-            <a href="#" className="hover:text-white transition">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition">Cookies</a>
-            <a href="#" className="hover:text-white transition">Sitemap</a>
+          <div className="flex flex-wrap gap-x-5 gap-y-1">
+            <a href="/terms-conditions" className="py-1 hover:text-white transition">Terms &amp; Conditions</a>
+            <a href="#" className="py-1 hover:text-white transition">Privacy Policy</a>
+            <a href="#" className="py-1 hover:text-white transition">Cookies</a>
+            <a href="#" className="py-1 hover:text-white transition">Sitemap</a>
           </div>
         </div>
       </div>

@@ -12,7 +12,8 @@ export default function ManVanForm({
   sentText = "A Van Hero will get back to you shortly with your free quote.",
 }) {
   const [sent, setSent] = useState(false);
-  const field = "w-full px-3.5 py-2.5 border border-line rounded-xl bg-white text-ink text-[.92rem] focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow transition";
+  // text-[16px] on mobile stops iOS Safari auto-zooming the page on focus
+  const field = "w-full px-3.5 py-3 sm:py-2.5 border border-line rounded-xl bg-white text-ink text-[16px] sm:text-[.92rem] focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow transition";
   const lab = "block text-[.82rem] font-semibold text-ink mb-1.5";
 
   if (sent) {
@@ -36,7 +37,7 @@ export default function ManVanForm({
         <div><label className={lab}>Email</label><input type="email" className={field} placeholder="john@example.com" required /></div>
         <div><label className={lab}>Postcode</label><input className={field} placeholder="CV1 1AA" required /></div>
         <div><label className={lab}>{lastLabel}</label><textarea rows={3} className={field} placeholder={lastPlaceholder} /></div>
-        <button type="submit" className="bg-brand-yellow text-ink font-display font-bold px-6 py-3 rounded-xl hover:-translate-y-0.5 transition">{cta}</button>
+        <button type="submit" className="bg-brand-yellow text-ink font-display font-bold px-6 py-3.5 sm:py-3 rounded-xl hover:-translate-y-0.5 active:scale-[.99] transition">{cta}</button>
         <p className="text-[.72rem] text-muted text-center">By submitting you agree to be contacted by Van Hero about your enquiry.</p>
       </form>
     </div>

@@ -24,7 +24,7 @@ export default function Newsletter() {
                 required
                 placeholder="Your email address"
                 aria-label="Email address"
-                className="flex-1 px-4 py-3 rounded-xl text-ink min-w-0"
+                className="flex-1 px-4 py-3 rounded-xl text-ink min-w-0 text-[16px] sm:text-[.95rem] focus:outline-none focus:ring-2 focus:ring-brand-yellow"
               />
               <button type="submit" className="bg-brand-yellow text-ink font-display font-bold px-6 py-3 rounded-xl hover:-translate-y-0.5 transition whitespace-nowrap">
                 Subscribe
