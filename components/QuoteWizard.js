@@ -116,12 +116,13 @@ export default function QuoteWizard() {
     setLoading(false);
   }
 
-  const field = "w-full px-3 py-2.5 border border-line rounded-xl bg-white text-ink text-[.9rem] focus:outline-none focus:ring-2 focus:ring-brand-yellow";
+  // text-[16px] on mobile stops iOS Safari auto-zooming the page on focus
+  const field = "w-full px-3 py-3 sm:py-2.5 border border-line rounded-xl bg-white text-ink text-[16px] sm:text-[.9rem] focus:outline-none focus:ring-2 focus:ring-brand-yellow";
   const lab = "block text-[.72rem] font-bold uppercase tracking-wide text-ink mb-1";
 
   if (result) {
     return (
-      <div className="bg-white rounded-2xl p-6 md:p-8 shadow-[0_40px_80px_-40px_rgba(0,0,0,.7)] text-center">
+      <div className="min-w-0 bg-white rounded-2xl p-6 md:p-8 shadow-[0_40px_80px_-40px_rgba(0,0,0,.7)] text-center">
         <div className="text-3xl">✅</div>
         <h3 className="font-display font-bold text-ink text-[1.4rem] mt-2">Your quote is booked!</h3>
         <div className="font-display font-black text-brand-blue text-[3rem] leading-none my-3">£{result.quote}</div>
@@ -136,15 +137,17 @@ export default function QuoteWizard() {
     );
   }
 
+  // min-w-0: as a grid item this must be allowed to shrink, otherwise the
+  // scrollable room-tab row stretches the whole section on mobile.
   return (
-    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-[0_40px_80px_-40px_rgba(0,0,0,.7)]">
+    <div className="min-w-0 bg-white rounded-2xl p-5 md:p-6 shadow-[0_40px_80px_-40px_rgba(0,0,0,.7)]">
       {/* progress */}
-      <div className="flex items-center gap-2 mb-5">
+      <div className="flex items-center gap-1.5 sm:gap-2 mb-5">
         {["Move", "Inventory", "Details"].map((label, i) => (
-          <div key={label} className="flex items-center gap-2 flex-1">
+          <div key={label} className="flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0">
             <span className={`w-7 h-7 shrink-0 rounded-full grid place-items-center text-[.8rem] font-bold ${step >= i + 1 ? "bg-brand-yellow text-ink" : "bg-soft text-muted"}`}>{i + 1}</span>
-            <span className={`text-[.78rem] font-semibold ${step >= i + 1 ? "text-ink" : "text-muted"}`}>{label}</span>
-            {i < 2 && <span className="flex-1 h-px bg-line" />}
+            <span className={`text-[.72rem] sm:text-[.78rem] font-semibold whitespace-nowrap ${step >= i + 1 ? "text-ink" : "text-muted"}`}>{label}</span>
+            {i < 2 && <span className="flex-1 min-w-[8px] h-px bg-line" />}
           </div>
         ))}
       </div>
@@ -155,7 +158,7 @@ export default function QuoteWizard() {
           {[{ key: "pickup", label: "Moving from", data: pickup }, { key: "delivery", label: "Moving to", data: delivery }].map(({ key, label, data }) => (
             <div key={key} className="bg-soft rounded-xl p-4 border border-line">
               <div className="font-display font-bold text-ink text-[.95rem] mb-2">{label}</div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div><label className={lab}>Postcode *</label><input className={field} placeholder={key === "pickup" ? "CV1 2WT" : "B1 1BB"} value={data.postcode} onChange={(e) => setP(key)({ postcode: e.target.value })} /></div>
                 <div><label className={lab}>Property *</label>
                   <select className={field} value={data.type} onChange={(e) => setP(key)({ type: e.target.value, size: "" })}>
@@ -164,7 +167,7 @@ export default function QuoteWizard() {
                 </div>
               </div>
               {data.type && data.type !== "Studio" && (
-                <div className="grid grid-cols-2 gap-2 mt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
                   <div><label className={lab}>Size *</label>
                     <select className={field} value={data.size} onChange={(e) => setP(key)({ size: e.target.value })}>
                       <option value="">Select size</option>{(SIZES[data.type] || []).map((s) => <option key={s}>{s}</option>)}
@@ -178,14 +181,14 @@ export default function QuoteWizard() {
                 </div>
               )}
               {data.type === "Flat" && (
-                <label className="mt-2 flex items-center gap-2 text-[.82rem] text-muted"><input type="checkbox" checked={data.lift} onChange={(e) => setP(key)({ lift: e.target.checked })} /> Lift available</label>
+                <label className="mt-2 flex items-center gap-2.5 text-[.82rem] text-muted py-1.5 cursor-pointer"><input type="checkbox" className="w-[18px] h-[18px] shrink-0 accent-[#ffd41c]" checked={data.lift} onChange={(e) => setP(key)({ lift: e.target.checked })} /> Lift available</label>
               )}
             </div>
           ))}
           <div>
             <label className={lab}>Move date</label>
             <input type="date" className={field} value={moveDate} disabled={noDate} onChange={(e) => setMoveDate(e.target.value)} />
-            <label className="mt-2 flex items-center gap-2 text-[.82rem] text-muted"><input type="checkbox" checked={noDate} onChange={(e) => setNoDate(e.target.checked)} /> I don&apos;t have a move date yet</label>
+            <label className="mt-2 flex items-center gap-2.5 text-[.82rem] text-muted py-1.5 cursor-pointer"><input type="checkbox" className="w-[18px] h-[18px] shrink-0 accent-[#ffd41c]" checked={noDate} onChange={(e) => setNoDate(e.target.checked)} /> I don&apos;t have a move date yet</label>
           </div>
           <button disabled={!validStep1} onClick={() => setStep(2)} className="bg-brand-yellow text-ink font-display font-bold px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-0.5 transition">Next: Inventory →</button>
         </div>
@@ -195,7 +198,7 @@ export default function QuoteWizard() {
       {step === 2 && (
         <div className="flex flex-col gap-4">
           <div className="rounded-xl overflow-hidden border border-line">
-            <div ref={mapRef} className="w-full h-[180px] bg-softblue" />
+            <div ref={mapRef} className="w-full h-[210px] sm:h-[180px] bg-softblue" />
             <div className="flex items-center justify-between px-4 py-2.5 bg-navy text-white text-[.85rem]">
               <span>{pickup.postcode?.toUpperCase()} → {delivery.postcode?.toUpperCase()}</span>
               <span className="font-bold text-brand-yellow">{miles != null ? `${miles} mi` : "…"}</span>
@@ -208,14 +211,14 @@ export default function QuoteWizard() {
                 <button key={r.room} onClick={() => setActiveRoom(r.room)} className={`shrink-0 px-3 py-1.5 rounded-lg text-[.78rem] font-semibold whitespace-nowrap ${activeRoom === r.room ? "bg-navy text-white" : "bg-soft text-muted"}`}>{r.room}</button>
               ))}
             </div>
-            <div className="mt-3 flex flex-col gap-1.5 max-h-[220px] overflow-y-auto pr-1">
+            <div className="mt-3 flex flex-col gap-1.5 max-h-[320px] sm:max-h-[220px] overflow-y-auto overscroll-contain pr-1">
               {INVENTORY.find((r) => r.room === activeRoom).items.map((it) => (
-                <div key={it.id} className="flex items-center justify-between py-1.5 border-b border-line last:border-0">
-                  <span className="text-[.9rem] text-ink">{it.label}</span>
-                  <div className="flex items-center gap-2.5">
-                    <button onClick={() => bump(it.id, -1)} className="w-7 h-7 rounded-lg bg-soft text-ink font-bold">−</button>
-                    <span className="w-5 text-center font-semibold text-ink tabular-nums">{inventory[it.id] || 0}</span>
-                    <button onClick={() => bump(it.id, 1)} className="w-7 h-7 rounded-lg bg-brand-yellow text-ink font-bold">+</button>
+                <div key={it.id} className="flex items-center justify-between gap-3 py-2 border-b border-line last:border-0">
+                  <span className="text-[.9rem] text-ink min-w-0">{it.label}</span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button aria-label={`Remove one ${it.label}`} onClick={() => bump(it.id, -1)} className="w-9 h-9 sm:w-7 sm:h-7 rounded-lg bg-soft text-ink font-bold text-[1.05rem] sm:text-[1rem] active:scale-95 transition">−</button>
+                    <span className="w-6 text-center font-semibold text-ink tabular-nums">{inventory[it.id] || 0}</span>
+                    <button aria-label={`Add one ${it.label}`} onClick={() => bump(it.id, 1)} className="w-9 h-9 sm:w-7 sm:h-7 rounded-lg bg-brand-yellow text-ink font-bold text-[1.05rem] sm:text-[1rem] active:scale-95 transition">+</button>
                   </div>
                 </div>
               ))}
@@ -234,15 +237,15 @@ export default function QuoteWizard() {
       {step === 3 && (
         <div className="flex flex-col gap-3">
           <div><label className={lab}>Full name *</label><input className={field} value={contact.name} onChange={(e) => setContact((c) => ({ ...c, name: e.target.value }))} placeholder="Your name" /></div>
-          <div className="grid grid-cols-2 gap-2">
-            <div><label className={lab}>Phone *</label><input className={field} value={contact.phone} onChange={(e) => setContact((c) => ({ ...c, phone: e.target.value }))} placeholder="07123 456 789" /></div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div><label className={lab}>Phone *</label><input className={field} inputMode="tel" value={contact.phone} onChange={(e) => setContact((c) => ({ ...c, phone: e.target.value }))} placeholder="07123 456 789" /></div>
             <div><label className={lab}>Email *</label><input type="email" className={field} value={contact.email} onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))} placeholder="john@example.com" /></div>
           </div>
           <div>
             <div className={lab}>Add-ons (optional)</div>
             <div className="flex flex-col gap-1.5">
               {EXTRAS.map((p) => (
-                <label key={p} className="flex items-center gap-2 text-[.88rem] text-muted"><input type="checkbox" checked={extras.includes(p)} onChange={(e) => setExtras((arr) => e.target.checked ? [...arr, p] : arr.filter((x) => x !== p))} /> {p}</label>
+                <label key={p} className="flex items-center gap-2.5 text-[.88rem] text-muted py-1.5 cursor-pointer"><input type="checkbox" className="w-[18px] h-[18px] shrink-0 accent-[#ffd41c]" checked={extras.includes(p)} onChange={(e) => setExtras((arr) => e.target.checked ? [...arr, p] : arr.filter((x) => x !== p))} /> {p}</label>
               ))}
             </div>
           </div>

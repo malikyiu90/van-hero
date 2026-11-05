@@ -5,7 +5,7 @@ export default function QuoteSection() {
     <section id="quote" className="bg-navy py-16 md:py-24">
       <div className="mx-auto max-w-wrap px-5 grid lg:grid-cols-[.85fr_1.15fr] gap-10 lg:gap-14 items-start">
         {/* left */}
-        <div className="lg:pt-6">
+        <div className="min-w-0 lg:pt-6">
           <span className="pill">No Strings Attached</span>
           <h2 className="font-display font-black text-white text-[clamp(2rem,4.5vw,3rem)] tracking-[-0.02em] leading-[1.05] mt-4">
             Get Your Free Quote — <span className="text-brand-yellow">No Strings</span>
