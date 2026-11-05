@@ -2,6 +2,7 @@ import Nav from "@/components/Nav";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import ManVanForm from "@/components/ManVanForm";
+import { HowItWorks } from "@/components/Sections";
 
 export const metadata = {
   title: "Moving Costs & Pricing — Van Hero",
@@ -90,6 +91,7 @@ export default function MovingCostsPage() {
         </div>
       </section>
 
+      <HowItWorks />
       <Newsletter />
       <Footer />
     </main>

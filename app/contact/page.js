@@ -2,6 +2,7 @@ import Nav from "@/components/Nav";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import ManVanForm from "@/components/ManVanForm";
+import { HowItWorks } from "@/components/Sections";
 
 export const metadata = {
   title: "Contact Van Hero — Coventry Removals",
@@ -62,6 +63,7 @@ export default function ContactPage() {
         </div>
       </section>
 
+      <HowItWorks />
       <Newsletter />
       <Footer />
     </main>

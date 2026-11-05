@@ -3,14 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --herobg: #f3f6fb;
+  --herobg: #eef2ff;
   --dot: #10b981;
-  --yellow: #ffc400;
-  --ink: #0b1b4a;
+  --yellow: #ffd60a;
+  --ink: #0b1f4a;
+  --royal: #0a2a8f;
 }
 
 html { scroll-behavior: smooth; }
-body { background: #fcfcfa; color: #5a6478; -webkit-font-smoothing: antialiased; }
+body { background: #ffffff; color: #606d9a; -webkit-font-smoothing: antialiased; }
 
 /* ---------- Shared bits ---------- */
 .pill {

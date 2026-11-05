@@ -220,21 +220,48 @@ export function HowItWorks() {
     <section id="how" className="py-16 md:py-24">
       <div className="mx-auto max-w-wrap px-5">
         <div className="max-w-[56ch] mx-auto text-center mb-12">
-          <Pill>Four Simple Steps To Your New Home</Pill>
+          <Pill>Four Simple Steps To Your New Home. We Do</Pill>
           <h2 className="font-display font-black text-ink text-[clamp(1.9rem,4.2vw,3rem)] tracking-[-0.02em] mt-4">How It Works</h2>
+          <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-brand-blue" />
         </div>
-        <div className="relative grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
-          {/* connector line across the top on desktop */}
-          <div className="hidden lg:block absolute top-8 left-[12%] right-[12%] h-px bg-[repeating-linear-gradient(90deg,#c9d2e6_0_8px,transparent_8px_16px)]" aria-hidden />
-          {steps.map((s) => (
-            <div key={s.n} className="relative text-center">
-              <div className="relative z-10 w-16 h-16 mx-auto mb-4 rounded-full bg-brand-yellow text-ink font-display font-black text-[1.6rem] grid place-items-center shadow-[0_10px_24px_-10px_rgba(224,165,0,.8)] ring-8 ring-white">
-                {String(s.n).padStart(2, "0")}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {steps.map((s, i) => {
+            const featured = i === 0;
+            return (
+              <div
+                key={s.n}
+                className={`relative rounded-2xl p-6 flex flex-col transition hover:-translate-y-1 ${
+                  featured
+                    ? "bg-brand-blue text-white shadow-[0_26px_55px_-28px_rgba(10,42,143,.9)]"
+                    : "bg-white border border-line text-ink hover:shadow-[0_26px_50px_-32px_rgba(3,5,65,.4)]"
+                }`}
+              >
+                {/* icon circle */}
+                <div
+                  className={`w-16 h-16 rounded-full grid place-items-center text-[1.7rem] ${
+                    featured ? "bg-white/15 ring-4 ring-white/25" : "bg-softblue"
+                  }`}
+                >
+                  {s.icon}
+                </div>
+
+                {/* dotted connector arrow to the next step (desktop) */}
+                {i < steps.length - 1 && (
+                  <div className="hidden lg:flex items-center absolute top-14 left-[72px] right-[-20px] pointer-events-none" aria-hidden>
+                    <div className={`flex-1 h-px ${featured ? "bg-[repeating-linear-gradient(90deg,rgba(255,255,255,.6)_0_6px,transparent_6px_12px)]" : "bg-[repeating-linear-gradient(90deg,#c0cae0_0_6px,transparent_6px_12px)]"}`} />
+                    <span className={`text-[1.1rem] -ml-1 ${featured ? "text-white/70" : "text-[#c0cae0]"}`}>›</span>
+                  </div>
+                )}
+
+                <h3 className={`font-display font-bold text-[1.18rem] mt-5 leading-tight ${featured ? "text-white" : "text-ink"}`}>
+                  {String(s.n).padStart(2, "0")}. {s.title}
+                </h3>
+                <p className={`text-[.9rem] mt-2 leading-relaxed ${featured ? "text-white/85" : "text-muted"}`}>
+                  {s.text}
+                </p>
               </div>
-              <h3 className="font-display font-bold text-ink text-[1.15rem]">{s.title}</h3>
-              <p className="text-[.9rem] mt-1.5 text-muted max-w-[30ch] mx-auto leading-relaxed">{s.text}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

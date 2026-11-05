@@ -1,18 +1,17 @@
-import { DM_Serif_Display, Hanken_Grotesk } from "next/font/google";
+import { Bricolage_Grotesque, Inter } from "next/font/google";
 import "./globals.css";
 import Loader from "@/components/Loader";
 
-// Display: DM Serif Display — a bold, high-impact luxury serif for striking headlines.
-const display = DM_Serif_Display({
+// Display: Bricolage Grotesque — the exact bold grotesque headline used on
+// vanhero.online. Variable font: omit `weight` (avoids Vercel next/font build error).
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
   variable: "--font-display",
   display: "swap",
 });
 
-// Body / UI: Hanken Grotesk — a clean, simple grotesk (not the usual AI default).
-const body = Hanken_Grotesk({
+// Body / UI: Inter — the live site's body typeface. Variable: omit `weight`.
+const body = Inter({
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
