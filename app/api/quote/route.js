@@ -52,6 +52,11 @@ async function drivingMiles(from, to) {
 /* ---------- pricing engine (exact V.M.T Excel model) ---------- */
 const floorNum = (f) => ({ "Ground floor": 0, "1st floor": 1, "2nd floor": 2, "3rd floor": 3, "4th+ floor": 4 }[f] || 0);
 
+// Money is kept to the penny. Rounding each line to whole pounds on the way
+// through loses real money — 23 miles is £34.50, not £35 — so every line is
+// held at 2dp and only the displayed figures are formatted.
+const money = (n) => Math.round(n * 100) / 100;
+
 function computePrice({ size, inventory, miles, pickup, delivery, extras, hours, crew }) {
   const breakdown = [];
   let subtotal = 0;
@@ -62,7 +67,7 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
   const h = Math.max(0, Number(hours) || 0);
   const c = Math.max(0, Math.min(4, Math.round(Number(crew) || 0)));
   const hourly = RATES.crewHourly[c] ?? RATES.crewHourly[4];
-  const labour = Math.round(h * hourly);
+  const labour = money(h * hourly);
 
   // Base call-out is waived on short jobs: up to SHORT_JOB_HOURS the labour
   // stands on its own, beyond that the call-out applies on top. With no hours
@@ -80,14 +85,14 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
 
   // mileage
   if (miles) {
-    const m = Math.round(Math.max(0, miles - RATES.freeMiles) * RATES.mileageRate);
+    const m = money(Math.max(0, miles - RATES.freeMiles) * RATES.mileageRate);
     if (m) { subtotal += m; breakdown.push({ label: `Mileage (${miles} mi)`, amount: m }); }
   }
 
   // inventory
   let inv = 0;
   Object.entries(inventory || {}).forEach(([id, q]) => { inv += (parseInt(q, 10) || 0) * (RATES.items[id] || 0); });
-  if (inv) { inv = Math.round(inv); subtotal += inv; breakdown.push({ label: "Inventory / items", amount: inv }); }
+  if (inv) { inv = money(inv); subtotal += inv; breakdown.push({ label: "Inventory / items", amount: inv }); }
 
   // access per address (flats, no usable lift)
   [["Collection", pickup], ["Delivery", delivery]].forEach(([lbl, p]) => {
@@ -108,10 +113,11 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
     if (amt) { subtotal += amt; breakdown.push({ label: x, amount: amt }); }
   });
 
-  const vat = Math.round(subtotal * RATES.vat);
-  const total = Math.round(subtotal + vat);
+  subtotal = money(subtotal);
+  const vat = money(subtotal * RATES.vat);
+  const total = money(subtotal + vat);
   breakdown.push({ label: "VAT (20%)", amount: vat });
-  return { total, breakdown, subtotal: Math.round(subtotal) };
+  return { total, breakdown, subtotal };
 }
 
 /* ---------- email via Resend ---------- */
@@ -129,7 +135,7 @@ async function sendEmails(ctx) {
     }).then((r) => r.ok).catch(() => false);
 
   const { reference, quote, lead, kind } = ctx;
-  const label = quote != null ? ` — £${quote}` : "";
+  const label = quote != null ? ` — £${Number(quote).toFixed(2)}` : "";
   const office = await send({
     from, to,
     reply_to: lead.email || undefined,
