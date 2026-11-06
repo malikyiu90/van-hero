@@ -7,7 +7,7 @@ export const metadata = {
 
 const data = {
   label: "Courier Services",
-  pill: "Coventry · UK · Europe",
+  pill: "UK · Europe",
   title: "Reliable Courier Services Across UK",
   intro: "Whether it's urgent same-day delivery across UK or scheduled multi-drop contract runs throughout Europe, our vetted hero fleet handles it with precision.",
   heroImage: "/services/manvan-hero.webp",
@@ -37,7 +37,7 @@ const data = {
     { q: "What is a same-day courier service?", a: "A same-day courier collects your item and delivers it directly on the same day — no hubs, no sorting depots. We can often collect within 60 minutes of booking." },
     { q: "What can you deliver?", a: "Anything from documents and parcels up to furniture, appliances and heavy or awkward items that normal parcel firms won't take. If it fits in the van, we can move it." },
     { q: "How quickly can you collect?", a: "Often within an hour or two locally, depending on availability. Booking earlier in the day gives the most flexibility." },
-    { q: "Do you deliver long distance?", a: "Yes. We run deliveries across the whole UK and into Europe, not just around Coventry — direct, with tracking the whole way." },
+    { q: "Do you deliver long distance?", a: "Yes. We run deliveries across the whole UK and into Europe, not just near you — direct, with tracking the whole way." },
     { q: "Are items insured in transit?", a: "Yes. Every job is covered by goods-in-transit insurance, so your item is protected from collection to delivery." },
     { q: "Do you offer scheduled contract runs for businesses?", a: "Yes. We set up daily or weekly routes and multi-drop runs for businesses at fixed, discounted rates — just tell us your schedule." },
   ],

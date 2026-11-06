@@ -41,7 +41,7 @@ const data = {
     { q: "Can I access my unit any time?", a: "Yes. You get a unique PIN and 24/7 access, 365 days a year — come and go as often as you like." },
     { q: "Are my belongings insured?", a: "Yes, every unit is covered up to £50k, and the whole site is protected by 24-hour CCTV and individual unit alarms." },
     { q: "Is there a minimum term?", a: "No long lock-ins. You can store for as little as a week or as long as you need, and only pay for the time you use." },
-    { q: "Do you collect my belongings for me?", a: "Yes. Book a unit for 12+ weeks and our crew will collect from your door and bring everything to our secure Coventry site — fully insured, at no extra cost." },
+    { q: "Do you collect my belongings for me?", a: "Yes. Book a unit for 12+ weeks and our crew will collect from your door and bring everything to our secure the UK site — fully insured, at no extra cost." },
   ],
   form: { pill: "★ Residential Storage", title: "Home Storage from £14/week", subtitle: "Free collection, 24/7 access, fully insured." },
 };

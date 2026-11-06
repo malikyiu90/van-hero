@@ -5,9 +5,9 @@ import Footer from "@/components/Footer";
 import BecomeHeroForm from "@/components/BecomeHeroForm";
 
 export const metadata = {
-  title: "Van Driver & Removals Jobs in Coventry — Become a Van Hero",
+  title: "Van Driver & Removals Jobs Across the UK — Become a Van Hero",
   description:
-    "Earn £800–£1,500 per week as a professional Van Hero. Be your own boss, choose your hours, and work with a team that values your graft. Now hiring drivers in Coventry.",
+    "Earn £800–£1,500 per week as a professional Van Hero. Be your own boss, choose your hours, and work with a team that values your graft. Now hiring drivers in the UK.",
 };
 
 const stats = [
@@ -19,7 +19,7 @@ const stats = [
 
 const paths = [
   { title: "Part-Time", pay: "£200–£300", per: "/wk", popular: false,
-    points: ["2-3 Days Per Week", "Evening & Weekends", "Local Coventry Jobs"] },
+    points: ["2-3 Days Per Week", "Evening & Weekends", "Local Jobs Near You"] },
   { title: "Full-Time", pay: "£500–£600", per: "/wk", popular: true,
     points: ["5 Days Guaranteed", "Priority Booking App", "Regional & Long Haul"] },
   { title: "Operator", pay: "£800–£1,000", per: "/wk", popular: false,
@@ -53,7 +53,7 @@ const eligibility = [
   "Valid UK driving License (No more than 6 points)",
   "Physical fitness for furniture removals",
   "Professional & friendly attitude",
-  "Living in or near Coventry area",
+  "Living anywhere in the UK",
 ];
 
 const needs = [
@@ -78,9 +78,9 @@ export default function BecomeHeroPage() {
       <section className="bg-herobg py-12 md:py-16">
         <div className="mx-auto max-w-wrap px-5 grid lg:grid-cols-[1.05fr_1fr] gap-10 items-center">
           <div>
-            <span className="pill">★ Now Hiring Drivers in Coventry</span>
+            <span className="pill">★ Now Hiring Drivers Across the UK</span>
             <h1 className="font-display font-extrabold text-ink text-[clamp(2.2rem,6vw,3.5rem)] leading-[1.05] tracking-[-0.02em] mt-4">
-              Van Driver &amp; Removals <span className="text-brand-blue">Jobs in Coventry</span>
+              Van Driver &amp; Removals <span className="text-brand-blue">Jobs Across the UK</span>
             </h1>
             <p className="mt-4 text-[1.02rem] text-muted max-w-[52ch] leading-relaxed">
               Earn £800–£1,500 per week as a professional Van Hero. Be your own boss, choose your hours,
@@ -98,7 +98,7 @@ export default function BecomeHeroPage() {
 
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden shadow-[0_30px_60px_-34px_rgba(4,5,66,.6)] aspect-[4/3]">
-              <Image src="/services/manvan-hero.webp" alt="Van Hero driver with a removals van in Coventry" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-cover" priority />
+              <Image src="/services/manvan-hero.webp" alt="Van Hero driver with a removals van" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-cover" priority />
               <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 bg-brand-yellow text-ink text-[.72rem] font-bold uppercase tracking-wide px-3 py-1.5 rounded-lg shadow">
                 ● 40+ Active Heros
               </span>

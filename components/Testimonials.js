@@ -31,7 +31,7 @@ export default function Testimonials() {
       <div className="mx-auto max-w-wrap px-5 text-center mb-10">
         <span className="pill">Trusted Locally</span>
         <h2 className="font-display font-black text-ink text-[clamp(1.9rem,4.2vw,3rem)] tracking-[-0.02em] mt-4">
-          Coventry Trusts Van Hero
+          The UK Trusts Van Hero
         </h2>
       </div>
 

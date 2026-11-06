@@ -88,7 +88,7 @@ export async function POST(req) {
             ${row("Licence number", a.licence)}
             ${row("Years clean driving", a.years)}
             ${row("Right to work in UK", a.rightToWork)}
-            ${row("Lives near Coventry", a.nearCoventry)}
+            ${row("Lives in the UK", a.nearCoventry)}
             ${row("Removals experience", a.experience)}
             ${row("Languages", a.languages)}
           </table>

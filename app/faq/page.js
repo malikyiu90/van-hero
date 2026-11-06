@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "FAQ — Van Hero",
-  description: "Answers to common questions about Van Hero removals, pricing, booking, insurance and the areas we cover across Coventry, Warwickshire and the UK.",
+  description: "Answers to common questions about Van Hero removals, pricing, booking, insurance and the areas we cover across the UK, Warwickshire and the UK.",
 };
 
 const groups = [
@@ -12,7 +12,7 @@ const groups = [
     heading: "General",
     faqs: [
       { q: "What services does Van Hero offer?", a: "Everything from a single man-with-a-van job to full house removals, office relocations, furniture delivery, student moves, European moves, packing, storage, courier runs, house clearance, handyman work and waste management." },
-      { q: "Which areas do you cover?", a: "We're based in Coventry and cover the whole of Warwickshire — Rugby, Leamington Spa, Warwick, Kenilworth, Nuneaton, Bedworth and more — plus long-distance moves across the UK and into Europe." },
+      { q: "Which areas do you cover?", a: "We cover the whole of the UK — Rugby, Leamington Spa, Warwick, Kenilworth, Nuneaton, Bedworth and more — plus long-distance moves across the UK and into Europe." },
       { q: "Do you help carry and load, or just drive?", a: "We do the lifting, carrying, loading and unloading for you. Our team handles your belongings with care from start to finish." },
     ],
   },

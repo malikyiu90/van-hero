@@ -18,7 +18,7 @@ export default function QuoteSection() {
             <a href="https://wa.me/447847117933" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp text-[#05371a] font-display font-bold px-6 py-3.5 rounded-xl hover:-translate-y-0.5 transition">💬 WhatsApp us</a>
           </div>
           <div className="mt-8 flex flex-col gap-3">
-            {["Fixed, itemised pricing", "Reliable, local Coventry crew", "Fully insured & licensed"].map((t) => (
+            {["Fixed, itemised pricing", "Reliable, local crews UK-wide", "Fully insured & licensed"].map((t) => (
               <div key={t} className="flex items-center gap-3 text-white font-semibold text-[.95rem]">
                 <span className="w-7 h-7 rounded-full bg-brand-yellow/20 text-brand-yellow grid place-items-center text-[.85rem]">✓</span>
                 {t}

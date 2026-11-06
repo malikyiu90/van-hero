@@ -24,7 +24,7 @@ export default function Nav() {
       <div className="bg-navy text-white/80 text-[11px] sm:text-[13px]">
         <div className="mx-auto max-w-wrap px-4 sm:px-5 py-[7px] flex items-center gap-2 sm:gap-4">
           <span className="inline-flex items-center gap-1.5 font-display font-bold uppercase tracking-[.08em] sm:tracking-[.1em] text-[10px] sm:text-[11px] text-white whitespace-nowrap">
-            <span className="w-2 h-2 rounded-full bg-brand-yellow animate-softpulse shrink-0" /> Live in Coventry
+            <span className="w-2 h-2 rounded-full bg-brand-yellow animate-softpulse shrink-0" /> Live across the UK
           </span>
           <span className="ml-auto flex items-center gap-3 sm:gap-5 whitespace-nowrap">
             <a href="tel:+447847117933" className="hover:text-white">☎ +44 7847 117933</a>

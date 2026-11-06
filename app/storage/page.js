@@ -24,7 +24,7 @@ const data = {
     { icon: "🚨", title: "Individually Alarmed Units", text: "Every unit is individually alarmed inside a secure, gated facility." },
     { icon: "📹", title: "CCTV Monitored", text: "The whole site is protected by 24-hour CCTV for complete peace of mind." },
     { icon: "🛡️", title: "Contents Insured", text: "Contents insured up to £50,000 for complete peace of mind." },
-    { icon: "📍", title: "Convenient Location", text: "Convenient Coventry base with easy drive-up access, serving the whole UK." },
+    { icon: "📍", title: "Convenient Location", text: "Convenient UK bases with easy drive-up access, serving the whole UK." },
   ],
   pricingCols: ["Unit Size", "Price", "Ideal For"],
   pricingIntro: "Simple weekly pricing — you only pay for the space you need, with no long contracts. Not sure what size suits you? Call us and we'll help you judge it.",
@@ -43,7 +43,7 @@ const data = {
     { q: "Are my belongings insured in storage?", a: "Yes, every unit is covered up to £50k, and the whole site is protected by 24-hour CCTV and individual unit alarms." },
     { q: "Is there a minimum storage term?", a: "No long lock-ins. You can store for as little as a week or as long as you need, and only pay for the time you use." },
     { q: "What size unit do I need?", a: "As a rough guide: 25 sq ft suits a single room, 50 sq ft a one-bed flat, 100 sq ft a two-bed house, and 150 sq ft a large family home. Not sure? Call us and we'll help you judge it." },
-    { q: "Do you collect my belongings for me?", a: "Yes. Book a unit for 12+ weeks and our crew will collect from your door and bring everything to our secure Coventry site — fully insured, at no extra cost." },
+    { q: "Do you collect my belongings for me?", a: "Yes. Book a unit for 12+ weeks and our crew will collect from your door and bring everything to our secure the UK site — fully insured, at no extra cost." },
   ],
   form: { pill: "★ Storage", title: "Storage from £14/week", subtitle: "Free collection, 24/7 access, fully insured." },
 };

@@ -43,7 +43,7 @@ export default function Newsletter() {
             <TrustpilotStar className="w-4 h-4" /> Trustpilot
           </a>
           <a
-            href="https://www.google.com/search?q=Van+Hero+Coventry+reviews"
+            href="https://www.google.com/search?q=Van+Hero+removals+reviews"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/20 rounded-xl px-3.5 py-2 text-[.82rem] font-bold transition"

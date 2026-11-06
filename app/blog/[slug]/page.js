@@ -50,7 +50,7 @@ export default function BlogArticle({ params }) {
           {/* CTA */}
           <div className="mt-10 bg-navy rounded-2xl p-7 text-center">
             <h2 className="font-display font-bold text-white text-[1.4rem]">Need a hand with your move?</h2>
-            <p className="text-white/75 mt-2">Get a free, fixed quote from Coventry's trusted movers — no obligation.</p>
+            <p className="text-white/75 mt-2">Get a free, fixed quote from the UK's trusted movers — no obligation.</p>
             <div className="mt-5 flex gap-3 justify-center flex-wrap">
               <a href="/contact" className="inline-flex items-center justify-center bg-brand-yellow text-ink font-display font-bold px-6 py-3 rounded-xl hover:-translate-y-0.5 transition">Get a Free Quote →</a>
               <a href="tel:+447847117933" className="inline-flex items-center justify-center border-2 border-white/40 text-white font-display font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition">Call +44 7847 117933</a>

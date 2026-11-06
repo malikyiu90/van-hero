@@ -19,9 +19,9 @@ const body = Inter({
 });
 
 export const metadata = {
-  title: "Van Hero — Coventry Removals & Logistics",
+  title: "Van Hero — UK Removals & Logistics",
   description:
-    "Van Hero is Moving Coventry Right Now. House removals, man & van, storage and couriers across Coventry & Warwickshire. Fixed or hourly pricing, fully insured & licensed.",
+    "Van Hero is Moving Britain Right Now. House removals, man & van, storage and couriers across the UK. Fixed or hourly pricing, fully insured & licensed.",
 };
 
 export default function RootLayout({ children }) {

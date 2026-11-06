@@ -11,7 +11,7 @@ const svc = [
   { label: "Courier Service", href: "/courier-services" },
   { label: "Packing", href: "/packing-services" },
 ];
-const area = ["Coventry (HQ)", "Finham", "Coundon", "Radford", "Wyken", "Walsgrave", "Nuneaton", "Leamington Spa"];
+const area = ["London", "Birmingham", "Manchester", "Leeds", "Bristol", "Liverpool", "Glasgow", "the UK (HQ)"];
 const socials = [
   { Icon: Facebook, label: "Facebook", href: "https://facebook.com" },
   { Icon: XTwitter, label: "X (Twitter)", href: "https://x.com" },
@@ -28,7 +28,7 @@ export default function Footer() {
           <div>
             <Logo tone="dark" className="h-16 w-auto" />
             <p className="mt-4 max-w-[34ch] text-[.92rem] leading-relaxed">
-              Coventry&apos;s trusted movers since 2020. Precision logistics for a stress-free move.
+              the UK&apos;s trusted movers since 2020. Precision logistics for a stress-free move.
             </p>
             <div className="text-[.92rem] leading-[2] mt-4">
               <a href="tel:+447847117933" className="font-bold text-white hover:text-brand-yellow transition">📞 +44 7847 117933</a><br />

@@ -167,10 +167,10 @@ export function Areas() {
         <div>
           <Pill>Service Coverage</Pill>
           <h2 className="font-display font-black text-ink text-[clamp(1.9rem,4.2vw,2.9rem)] tracking-[-0.02em] mt-4">
-            Local Removals Across Coventry &amp; Warwickshire
+            Removals Across the Whole of the UK
           </h2>
           <p className="mt-3 text-[1.02rem] text-muted max-w-[46ch]">
-            We provide trusted house removals, office relocations and man &amp; van services throughout Coventry,
+            We provide trusted house removals, office relocations and man &amp; van services throughout the UK,
             Warwickshire and the surrounding areas. Wherever you&apos;re moving, you can count on a local team that
             knows the area and gets the job done properly.
           </p>
@@ -186,8 +186,8 @@ export function Areas() {
         {/* right: responsive live map */}
         <div className="relative w-full rounded-2xl overflow-hidden shadow-[0_26px_60px_-30px_rgba(3,5,65,.55)] border border-white/60 aspect-[4/3] lg:aspect-auto lg:h-[460px]">
           <iframe
-            title="Van Hero coverage map — Coventry & Warwickshire"
-            src="https://www.google.com/maps?q=Coventry,+UK&z=10&output=embed"
+            title="Van Hero coverage map — the UK"
+            src="https://www.google.com/maps?q=United+Kingdom&z=5&output=embed"
             className="absolute inset-0 w-full h-full border-0"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"

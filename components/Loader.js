@@ -47,7 +47,7 @@ export default function Loader() {
           <span className="vh-van" style={{ left: pct + "%" }}>🚐</span>
         </div>
         <div className="vh-pct">{pct}%</div>
-        <div className="vh-tag">Moving Coventry, one load at a time</div>
+        <div className="vh-tag">Moving Britain, one load at a time</div>
       </div>
     </div>
   );

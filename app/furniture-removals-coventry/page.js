@@ -42,11 +42,11 @@ const data = {
   faqHeading: "Questions About Furniture Removal",
   faqIntro: "Everything you need to know about moving furniture with Van Hero. Still got a question? Just call or message us.",
   faqs: [
-    { q: "Can you move a single piece of furniture?", a: "Yes. We can collect and deliver sofas, wardrobes, beds, tables, appliances and other individual items across Coventry and beyond." },
+    { q: "Can you move a single piece of furniture?", a: "Yes. We can collect and deliver sofas, wardrobes, beds, tables, appliances and other individual items across the UK and beyond." },
     { q: "Will my furniture be protected during the move?", a: "Yes. We use protective coverings, secure loading methods and careful handling to help prevent scratches, marks and damage in transit." },
     { q: "Can you dismantle and reassemble furniture?", a: "Yes. Where required, our team can dismantle suitable furniture before transport and reassemble it at the delivery address." },
     { q: "How much does it cost to move a single item of furniture?", a: "Single-item moves start from £25, with the price depending on the size of the item, the access at both ends, and the distance. You'll get a clear fixed quote before we start — no hidden fees." },
-    { q: "Can you collect from a shop or Facebook Marketplace seller?", a: "Yes — that's one of our most popular jobs. We collect from stores, retail parks, or a private seller's address and deliver straight to your door, across Coventry, Rugby and Warwick." },
+    { q: "Can you collect from a shop or Facebook Marketplace seller?", a: "Yes — that's one of our most popular jobs. We collect from stores, retail parks, or a private seller's address and deliver straight to your door, across the UK, Rugby and Warwick." },
     { q: "Can you move heavy or awkward items like a piano or an American fridge?", a: "Yes. Our crews are equipped for heavy and oversized items — pianos, range cookers, American fridge-freezers and solid-oak furniture — with the right kit and a multi-person lift where needed." },
   ],
   form: { pill: "★ Furniture Moves", title: "Move a Single Item from £25", subtitle: "Sofas, beds, wardrobes and awkward pieces." },

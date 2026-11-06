@@ -1,7 +1,7 @@
 import ServicePage from "@/components/ServicePage";
 
 export const metadata = {
-  title: "Local Handyman Services Coventry — Van Hero",
+  title: "Local Handyman Services UK — Van Hero",
   description: "Skilled local tradesmen from £45/hour. Flat-pack assembly, TV mounting, shelves, blinds, taps and small repairs. Same-day available, fully insured.",
 };
 
@@ -51,7 +51,7 @@ const data = {
     { q: "Do you assemble flat-pack furniture?", a: "Yes, it's one of our most-booked jobs. We build it properly and fix tall units to the wall safely — especially important where there are children in the home." },
     { q: "Can you do gas or electrical work?", a: "Only where it's legal to. Gas work must be done by a Gas Safe registered engineer, and notifiable electrical work by a registered electrician — so we'll tell you honestly if a job needs a specialist instead." },
     { q: "Are you insured?", a: "Yes. Our handyman service carries public liability insurance, so your home is protected if anything goes wrong." },
-    { q: "Which areas do you cover?", a: "Coventry and the surrounding Warwickshire area — including Rugby, Leamington Spa, Warwick, Kenilworth, Nuneaton and Bedworth." },
+    { q: "Which areas do you cover?", a: "the whole of the UK — including Rugby, Leamington Spa, Warwick, Kenilworth, Nuneaton and Bedworth." },
   ],
   form: { pill: "★ Handyman", title: "Handyman from £45/hour", subtitle: "Same-day available, fully insured." },
 };

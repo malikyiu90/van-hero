@@ -15,12 +15,12 @@ const data = {
   sectionHeading: "Door-to-Door European Removals from UK",
   sectionImage: "/services/european.webp",
   sectionParas: [
-    "Moving abroad is more than just a logistical challenge; it's the start of a new chapter. At Van Hero, we specialize in bridging the gap between your life in Coventry and your new destination in Europe. Whether you're heading to a coastal villa in Spain or a city apartment in Berlin, our \"Capable Care\" approach ensures your belongings are handled with the same respect we'd give our own family's possessions.",
-    "We manage the entire international journey. From navigating post-Brexit customs documentation to coordinating with our trusted local partner networks across the continent, our Coventry-based team takes the weight off your shoulders. We offer a seamless, door-to-door service that eliminates the stress of multi-modal transport and complex storage arrangements.",
+    "Moving abroad is more than just a logistical challenge; it's the start of a new chapter. At Van Hero, we specialize in bridging the gap between your life in the UK and your new destination in Europe. Whether you're heading to a coastal villa in Spain or a city apartment in Berlin, our \"Capable Care\" approach ensures your belongings are handled with the same respect we'd give our own family's possessions.",
+    "We manage the entire international journey. From navigating post-Brexit customs documentation to coordinating with our trusted local partner networks across the continent, our UK-wide team takes the weight off your shoulders. We offer a seamless, door-to-door service that eliminates the stress of multi-modal transport and complex storage arrangements.",
   ],
   features: [
     { icon: "📋", title: "Customs Docs", text: "Complete handling of all necessary customs and transit paperwork for cross-border transit." },
-    { icon: "🚚", title: "Door-to-Door", text: "One van, one team, from your front door in Coventry to your new address in Europe." },
+    { icon: "🚚", title: "Door-to-Door", text: "One van, one team, from your front door in the UK to your new address in Europe." },
     { icon: "💷", title: "Fixed-Price", text: "Clear, upfront quotes with no hidden fuel surcharges or surprise international fees." },
     { icon: "📦", title: "Quality Packing", text: "Export-grade materials to ensure your items survive the longer haul of continental roads." },
     { icon: "🤝", title: "Partner Network", text: "Local assistance across Europe to handle narrow streets or complex parking logistics." },
@@ -34,7 +34,7 @@ const data = {
     ["Bespoke", "Custom", "Large estates or specialty items (pianos, etc.)"],
   ],
   steps: [
-    { n: "01", title: "Tell Us Destination", text: "Get a free, no-obligation video survey or in-person quote in Coventry." },
+    { n: "01", title: "Tell Us Destination", text: "Get a free, no-obligation video survey or in-person quote in the UK." },
     { n: "02", title: "Sign Paperwork", text: "We prepare your inventory and customs documents, then confirm your fixed price and dates." },
     { n: "03", title: "Relax & Move", text: "We collect, transport and deliver door-to-door, straight to your new address in Europe." },
   ],
@@ -42,7 +42,7 @@ const data = {
   faqIntro: "Everything you need to know about moving from the UK to Europe. Still got a question? Just call or message us.",
   faqs: [
     { q: "How long will my European move take?", a: "Delivery times vary depending on the destination, route, load size and customs requirements. Once we understand your move, we will explain the expected schedule and keep you informed throughout the journey." },
-    { q: "Do you offer a door-to-door European removals service?", a: "Yes. We can collect your belongings from your property in Coventry, transport them safely across Europe and deliver them directly to your new address. Packing and loading support can also be included when required." },
+    { q: "Do you offer a door-to-door European removals service?", a: "Yes. We can collect your belongings from your property in the UK, transport them safely across Europe and deliver them directly to your new address. Packing and loading support can also be included when required." },
     { q: "Are my belongings protected during the journey?", a: "Your items are handled carefully, securely loaded and protected for long-distance transport. We also provide insured and tracked European removals, giving you greater reassurance while your belongings are in transit." },
     { q: "Will I have to pay import duty or customs charges?", a: "Usually not on used personal belongings, if you're genuinely relocating — every EU country offers a transfer-of-residence relief. You'll need a detailed inventory and proof of your move, which we'll help you prepare. Rules vary by country, so we'll always point you to check your destination's current requirements." },
     { q: "What paperwork do I need for a European move?", a: "Typically a detailed inventory of everything you're moving with values, proof of residence at your destination, and a customs declaration. We prepare the inventory as we pack and help you get the rest in order." },

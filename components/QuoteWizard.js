@@ -115,14 +115,8 @@ export default function QuoteWizard() {
 
   const validStep1 = pickup.postcode && delivery.postcode && pickup.type && delivery.type && (pickup.type === "Studio" || pickup.size) && (delivery.type === "Studio" || delivery.size);
   const itemCount = Object.values(inventory).reduce((a, b) => a + b, 0);
-  const ALL_ITEMS = INVENTORY.flatMap((r) => r.items);
-  const itemsTotal = Object.entries(inventory).reduce((sum, [id, q]) => {
-    const it = ALL_ITEMS.find((x) => x.id === id);
-    return sum + (it ? it.price * q : 0);
-  }, 0);
   const room = INVENTORY[roomIdx];
   const roomCount = (r) => r.items.reduce((n, it) => n + (inventory[it.id] || 0), 0);
-  const money = (n) => String(Number(n.toFixed(2)));
 
   async function submit() {
     setError("");
@@ -278,10 +272,7 @@ export default function QuoteWizard() {
                       className="min-w-0 flex-1 text-left"
                       aria-label={`Add one ${it.label}`}
                     >
-                      <span className="block text-[.9rem] text-ink leading-tight">{it.label}</span>
-                      <span className="block text-[.78rem] text-muted whitespace-nowrap">
-                        £{money(it.price)} each{qty > 1 ? ` · £${money(it.price * qty)}` : ""}
-                      </span>
+                      <span className="block text-[.95rem] text-ink leading-snug">{it.label}</span>
                     </button>
                     <div className="flex items-center gap-2 shrink-0">
                       <button aria-label={`Remove one ${it.label}`} onClick={() => bump(it.id, -1)} className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-soft text-ink font-bold text-[1.05rem] active:scale-95 transition">−</button>
@@ -328,7 +319,7 @@ export default function QuoteWizard() {
           {/* running total of what they've picked */}
           <div className="flex items-center justify-between bg-softblue rounded-xl px-4 py-3">
             <span className="text-[.85rem] text-muted">{itemCount} item{itemCount === 1 ? "" : "s"} selected</span>
-            <span className="font-display font-bold text-ink">£{money(itemsTotal)}</span>
+            <span className="text-[.82rem] text-muted2">Your price is shown at the end</span>
           </div>
 
           <div className="flex gap-2">

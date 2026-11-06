@@ -23,7 +23,7 @@ function MapOverlays({ job, shown, onClose, variant }) {
     <>
       <div className={`absolute z-[4] flex items-center gap-2 bg-white rounded-xl px-3 py-2 shadow-[0_8px_20px_rgba(11,27,74,.16)] ${desktop ? "top-[10%] left-[42%] right-[18px]" : "top-3 left-3 right-3"}`}>
         <span className="w-[9px] h-[9px] rounded-full bg-dot animate-softpulse" />
-        <b className="font-body font-bold text-ink text-[.78rem] uppercase tracking-wide">Live in Coventry</b>
+        <b className="font-body font-bold text-ink text-[.78rem] uppercase tracking-wide">Live across the UK</b>
         <span className="ml-auto bg-[#eef1f6] text-muted2 text-[.66rem] font-bold px-2 py-1 rounded-md whitespace-nowrap">REF · CV-882 ›</span>
       </div>
 
@@ -66,14 +66,14 @@ export default function Hero() {
         {/* text */}
         <div className="w-full lg:max-w-[560px]">
           <span className="pill fade-up">
-            <span className="w-[7px] h-[7px] rounded-full bg-ink" /> Coventry · Live
+            <span className="w-[7px] h-[7px] rounded-full bg-ink" /> UK · Live
           </span>
           <h1 className="fade-up font-display font-extrabold text-ink leading-[1.055] tracking-[-0.02em] mt-5 text-[clamp(2.4rem,9vw,3.5rem)]" style={{ animationDelay: ".14s" }}>
-            Van Hero is Moving Coventry Right{" "}
+            Van Hero is Moving Britain Right{" "}
             <span className="whitespace-nowrap">Now<span className="gdot-big" /></span>
           </h1>
           <p className="fade-up mt-4 text-[1rem] sm:text-[1.05rem] max-w-[42ch]" style={{ animationDelay: ".23s" }}>
-            Live removals, man &amp; van, storage and couriers across Coventry &amp; Warwickshire — tracked in real time.
+            Live removals, man &amp; van, storage and couriers across the UK — tracked in real time.
           </p>
           <div className="fade-up mt-8 grid grid-cols-3 gap-4 max-w-[380px]" style={{ animationDelay: ".32s" }}>
             <Stat to={3} label="Crews On The Road" />

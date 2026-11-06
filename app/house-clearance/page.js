@@ -48,7 +48,7 @@ const data = {
     { q: "What happens to the items you clear?", a: "We recycle 85%+ of everything we collect — reusable furniture goes to local charities where we can, recyclables are sorted, and only what's genuinely unusable goes to licensed disposal." },
     { q: "Can you do same-day or urgent clearances?", a: "Often, yes. We keep slots open for urgent end-of-tenancy and same-day jobs — call us and we'll tell you the soonest we can get to you." },
     { q: "Do you handle bereavement and probate clearances?", a: "Yes, with care and discretion. We're used to clearing homes after a loss or for probate, and we'll work at your pace and set aside anything you want kept." },
-    { q: "Which areas do you cover for house clearance?", a: "Coventry and across Warwickshire — including Rugby, Leamington Spa, Warwick, Kenilworth, Nuneaton, Bedworth and Solihull." },
+    { q: "Which areas do you cover for house clearance?", a: "right across the UK — including Rugby, Leamington Spa, Warwick, Kenilworth, Nuneaton, Bedworth and Solihull." },
   ],
   form: { pill: "★ House Clearance", title: "Clearances from £80", subtitle: "Licensed, insured, 85%+ recycled." },
 };

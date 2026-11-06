@@ -1,7 +1,7 @@
 import ServicePage from "@/components/ServicePage";
 
 export const metadata = {
-  title: "Office Removals Coventry — Van Hero",
+  title: "Office Removals UK — Van Hero",
   description: "Professional office and commercial relocations with minimal disruption. Desks, IT, servers and archives moved evenings and weekends. Fixed-price, fully insured.",
 };
 

@@ -227,7 +227,7 @@ export default function BecomeHeroForm() {
 
               {[
                 { k: "rightToWork", q: "Do you have the right to work in the UK? *", opts: ["Yes", "No"] },
-                { k: "nearCoventry", q: "Do you live in or near Coventry? *", opts: ["Yes", "No"] },
+                { k: "nearCoventry", q: "Do you live in the UK? *", opts: ["Yes", "No"] },
                 { k: "experience", q: "Removals experience *", opts: ["None", "Some", "Lots"] },
               ].map(({ k, q, opts }) => (
                 <div key={k}>
@@ -314,7 +314,7 @@ export default function BecomeHeroForm() {
                 ["Role", f.role], ["Name", f.name], ["Phone", f.phone], ["Email", f.email],
                 ["Postcode", f.postcode.toUpperCase()], ["Licence", f.licence],
                 ["Clean driving", f.years ? `${f.years} years` : ""],
-                ["Right to work", f.rightToWork], ["Near Coventry", f.nearCoventry],
+                ["Right to work", f.rightToWork], ["Lives in UK", f.nearCoventry],
                 ["Experience", f.experience], ["Languages", f.languages],
                 ["Documents", `${Object.keys(docs).length} attached`],
               ].filter(([, v]) => v).map(([k, v]) => (

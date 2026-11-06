@@ -8,13 +8,13 @@ import { HowItWorks } from "@/components/Sections";
 import { posts, areas } from "@/lib/data";
 
 export const metadata = {
-  title: "Man with a Van Coventry — Van Hero",
-  description: "Reliable man and van services across Coventry, Warwickshire and the whole UK. Single items to half-house moves from £25. Same-day available, fully insured.",
+  title: "Man with a Van — UK Wide — Van Hero",
+  description: "Reliable man and van services across the whole of the UK. Single items to half-house moves from £25. Same-day available, fully insured.",
 };
 
 const features = [
   { icon: "📦", title: "Single-Item", text: "Single items, furniture collections and eBay or Facebook Marketplace purchases delivered anywhere in UK. No minimum load size." },
-  { icon: "🎓", title: "Student Moves", text: "Affordable, hassle-free moves for Coventry and Whole UK students. Perfect for halls, house shares and summer storage." },
+  { icon: "🎓", title: "Student Moves", text: "Affordable, hassle-free moves for students anywhere in the UK. Perfect for halls, house shares and summer storage." },
   { icon: "🏬", title: "Store & Flat-Pack Pickups", text: "Bought something that won't fit in the car? We'll collect it from the store and deliver it to your door. Assembly available on request." },
   { icon: "🏠", title: "Small Home Moves", text: "Studios, one-bed flats, and house-shares. All the flexibility of a man with a van, without paying for a full removals crew." },
   { icon: "🛣️", title: "Long Distance", text: "Moving further afield? We provide reliable long-distance man and van services across the UK, with door-to-door delivery." },
@@ -33,7 +33,7 @@ const faqs = [
   { q: "Do you help carry and load, or just drive?", a: "We do the lifting, carrying, loading and unloading for you. Our team handles your belongings with care from start to finish." },
   { q: "Can you come the same day?", a: "Yes — same-day availability is often possible depending on the time and your location. Call us and we'll do our best to fit you in." },
   { q: "Are my items insured?", a: "Yes, your belongings are covered by goods-in-transit and public liability insurance while in our care." },
-  { q: "Do you cover moves outside Coventry?", a: "Absolutely. We're based in Coventry but cover Warwickshire and the whole of the UK, including long-distance door-to-door moves." },
+  { q: "Do you cover moves anywhere in the UK?", a: "Absolutely. We cover the whole of the UK, including long-distance door-to-door moves." },
   { q: "How far in advance should I book?", a: "The sooner the better for guaranteed slots, but we also take last-minute and same-day bookings whenever we have availability." },
 ];
 
@@ -82,7 +82,7 @@ export default function ManWithVanPage() {
             <div className="relative rounded-2xl overflow-hidden aspect-[16/10] mb-6">
               <Image src="/services/manvan.webp" alt="Van Hero branded van" fill sizes="(max-width:1024px) 100vw, 60vw" className="object-cover" />
             </div>
-            <p className="text-muted leading-relaxed">From single-item collections to small home moves, Van Hero provides reliable man and van services across Coventry, Warwickshire and whole UK. Whether it's a sofa, furniture collection, student move or flat move, we'll do the lifting, loading and transport—so you don't have to.</p>
+            <p className="text-muted leading-relaxed">From single-item collections to small home moves, Van Hero provides reliable man and van services across the UK, Warwickshire and whole UK. Whether it's a sofa, furniture collection, student move or flat move, we'll do the lifting, loading and transport—so you don't have to.</p>
             <p className="text-muted leading-relaxed mt-3">Our friendly local team turns up on time, handles your belongings with care and gets the job done properly. Fast, flexible and hassle-free.</p>
 
             {/* feature cards */}

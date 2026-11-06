@@ -6,7 +6,7 @@ import Testimonials from "@/components/Testimonials";
 
 export const metadata = {
   title: "About Van Hero — UK's Trusted Local Movers",
-  description: "Coventry's trusted movers since 2020. Built by locals, with decades of combined logistics experience, transparent pricing and 150+ five-star reviews.",
+  description: "the UK's trusted movers since 2020. Built by locals, with decades of combined logistics experience, transparent pricing and 150+ five-star reviews.",
 };
 
 const stats = [
@@ -42,7 +42,7 @@ export default function AboutPage() {
           <div>
             <span className="pill">About Us</span>
             <h1 className="font-display font-black text-ink text-[clamp(2.1rem,5vw,3.3rem)] tracking-[-0.02em] mt-4">About Van Hero — UK's Trusted Local Movers, Built by Locals</h1>
-            <p className="text-muted mt-4 text-[1.05rem] leading-relaxed">Coventry's trusted movers since 2020. We're a local team with decades of combined experience in logistics and removals, here to make every move quick, careful and completely stress-free. Move with Van Hero — done in a day.</p>
+            <p className="text-muted mt-4 text-[1.05rem] leading-relaxed">the UK's trusted movers since 2020. We're a local team with decades of combined experience in logistics and removals, here to make every move quick, careful and completely stress-free. Move with Van Hero — done in a day.</p>
             <div className="mt-7 flex gap-3 flex-wrap">
               <a href="/contact" className="inline-flex items-center justify-center bg-brand-yellow text-ink font-display font-bold px-6 py-3.5 rounded-xl hover:-translate-y-0.5 transition">Get a Free Quote →</a>
               <a href="/services" className="inline-flex items-center justify-center border-2 border-ink text-ink font-display font-bold px-6 py-3.5 rounded-xl hover:-translate-y-0.5 transition">Our Services</a>
