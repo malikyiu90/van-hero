@@ -34,12 +34,40 @@ export async function POST(req) {
       return Response.json({ ok: false, error: "Please confirm your details are accurate." }, { status: 400 });
     }
 
+    // Documents arrive base64-encoded and ride along as email attachments, so
+    // nothing needs storing. Re-validate here — the client checks are only a
+    // convenience and can be bypassed.
+    const OK_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+    const MAX_ONE = 2_000_000, MAX_TOTAL = 4_000_000;
+    const incoming = Array.isArray(b.documents) ? b.documents.slice(0, 8) : [];
+    const documents = [];
+    let totalBytes = 0;
+    for (const d of incoming) {
+      const content = String(d?.content || "");
+      const type = String(d?.type || "");
+      if (!content || !OK_TYPES.includes(type)) continue;
+      const bytes = Math.floor(content.length * 0.75);
+      if (bytes > MAX_ONE) {
+        return Response.json({ ok: false, error: `${s(d.filename, 80) || "A file"} is too large.` }, { status: 400 });
+      }
+      totalBytes += bytes;
+      if (totalBytes > MAX_TOTAL) {
+        return Response.json({ ok: false, error: "Those documents are too large in total. Please remove one and try again." }, { status: 400 });
+      }
+      documents.push({
+        label: s(d.label, 60) || s(d.field, 60),
+        filename: (s(d.filename, 80) || "document").replace(/[^\w.\- ]/g, "_"),
+        content,
+      });
+    }
+
     const reference = makeReference();
 
     const key = process.env.RESEND_API_KEY;
     const to = process.env.QUOTE_TO_EMAIL || "Vmtofficials@gmail.com";
-    // Driver applications come from Careers, not the quotes mailbox.
-    const from = process.env.APPLY_FROM_EMAIL || "Van Hero Careers <careers@vanhero.online>";
+    // Drivers join as partners, so applications come from the partners mailbox
+    // rather than the quotes one.
+    const from = process.env.APPLY_FROM_EMAIL || "Van Hero Partners <partners@vanhero.online>";
     let emailed = false;
 
     if (key) {
@@ -64,7 +92,12 @@ export async function POST(req) {
             ${row("Removals experience", a.experience)}
             ${row("Languages", a.languages)}
           </table>
-          <p style="font-size:12px;color:#606d9a;margin-top:14px">Applicant confirmed the information is true and accurate. Documents (licence, insurance, vehicle photos) still need collecting.</p>
+          <h3 style="margin:16px 0 6px">Documents</h3>
+          ${documents.length
+            ? `<table style="border-collapse:collapse;width:100%">${documents.map((d) => row(d.label, d.filename)).join("")}</table>
+               <p style="font-size:12px;color:#606d9a;margin-top:6px">Attached to this email.</p>`
+            : `<p style="color:#606d9a">None uploaded — still to collect.</p>`}
+          <p style="font-size:12px;color:#606d9a;margin-top:14px">Applicant confirmed the information is true and accurate.</p>
         </div>
       </div>`;
 
@@ -94,6 +127,9 @@ export async function POST(req) {
         from, to, reply_to: a.email || undefined,
         subject: `${reference} — driver application — ${a.name}`,
         html: officeHtml,
+        ...(documents.length
+          ? { attachments: documents.map((d) => ({ filename: d.filename, content: d.content })) }
+          : {}),
       });
       const applicant = a.email
         ? await send({ from, to: a.email, subject: `Your Van Hero application ${reference}`, html: applicantHtml })
