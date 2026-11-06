@@ -19,6 +19,11 @@ export default function ManVanForm({
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
+  // Tapping anywhere on a date field should open the picker (browsers only do
+  // that for the tiny calendar icon), and a move date can't be in the past.
+  const today = new Date().toISOString().split("T")[0];
+  const openPicker = (e) => { try { e.currentTarget.showPicker?.(); } catch {} };
+
   const field = "w-full px-3.5 py-3 sm:py-2.5 border border-line rounded-xl bg-white text-ink text-[16px] sm:text-[.92rem] focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow transition";
   const lab = "block text-[.82rem] font-semibold text-ink mb-1.5";
 
@@ -95,7 +100,7 @@ export default function ManVanForm({
         </div>
 
         <div><label className={lab}>Preferred move date</label>
-          <input type="date" className={field} value={form.date} onChange={set("date")} /></div>
+          <input type="date" min={today} className={`${field} cursor-pointer`} value={form.date} onClick={openPicker} onFocus={openPicker} onChange={set("date")} /></div>
 
         <div><label className={lab}>{lastLabel}</label>
           <textarea rows={4} className={field} placeholder={lastPlaceholder} value={form.notes} onChange={set("notes")} />

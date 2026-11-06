@@ -39,7 +39,8 @@ export default function QuoteWizard() {
   const [moveDate, setMoveDate] = useState("");
   const [noDate, setNoDate] = useState(false);
   const [inventory, setInventory] = useState({});
-  const [activeRoom, setActiveRoom] = useState(INVENTORY[0].room);
+  const [roomIdx, setRoomIdx] = useState(0);
+  const [otherItems, setOtherItems] = useState("");
   const [extras, setExtras] = useState([]);
   const [contact, setContact] = useState({ name: "", phone: "", email: "" });
   const [notes, setNotes] = useState("");
@@ -101,6 +102,14 @@ export default function QuoteWizard() {
 
   const validStep1 = pickup.postcode && delivery.postcode && pickup.type && delivery.type && (pickup.type === "Studio" || pickup.size) && (delivery.type === "Studio" || delivery.size);
   const itemCount = Object.values(inventory).reduce((a, b) => a + b, 0);
+  const ALL_ITEMS = INVENTORY.flatMap((r) => r.items);
+  const itemsTotal = Object.entries(inventory).reduce((sum, [id, q]) => {
+    const it = ALL_ITEMS.find((x) => x.id === id);
+    return sum + (it ? it.price * q : 0);
+  }, 0);
+  const room = INVENTORY[roomIdx];
+  const roomCount = (r) => r.items.reduce((n, it) => n + (inventory[it.id] || 0), 0);
+  const money = (n) => String(Number(n.toFixed(2)));
 
   async function submit() {
     setError("");
@@ -109,7 +118,7 @@ export default function QuoteWizard() {
     try {
       const r = await fetch("/api/quote", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pickup, delivery, inventory, extras, contact, notes, moveDate: noDate ? "flexible" : moveDate, mode: "quote" }),
+        body: JSON.stringify({ pickup, delivery, inventory, extras, contact, notes, otherItems, moveDate: noDate ? "flexible" : moveDate, mode: "quote" }),
       });
       const j = await r.json();
       if (j.ok) setResult(j); else setError(j.error || "Something went wrong.");
@@ -118,6 +127,11 @@ export default function QuoteWizard() {
   }
 
   // text-[16px] on mobile stops iOS Safari auto-zooming the page on focus
+  // Tapping anywhere on a date field should open the picker (browsers only do
+  // that for the tiny calendar icon), and a move date can't be in the past.
+  const today = new Date().toISOString().split("T")[0];
+  const openPicker = (e) => { try { e.currentTarget.showPicker?.(); } catch {} };
+
   const field = "w-full px-3 py-3 sm:py-2.5 border border-line rounded-xl bg-white text-ink text-[16px] sm:text-[.9rem] focus:outline-none focus:ring-2 focus:ring-brand-yellow";
   const lab = "block text-[.72rem] font-bold uppercase tracking-wide text-ink mb-1";
 
@@ -194,7 +208,7 @@ export default function QuoteWizard() {
           ))}
           <div>
             <label className={lab}>Move date</label>
-            <input type="date" className={field} value={moveDate} disabled={noDate} onChange={(e) => setMoveDate(e.target.value)} />
+            <input type="date" min={today} className={`${field} cursor-pointer`} value={moveDate} disabled={noDate} onClick={openPicker} onFocus={openPicker} onChange={(e) => setMoveDate(e.target.value)} />
             <label className="mt-2 flex items-center gap-2.5 text-[.82rem] text-muted py-1.5 cursor-pointer"><input type="checkbox" className="w-[18px] h-[18px] shrink-0 accent-[#ffd41c]" checked={noDate} onChange={(e) => setNoDate(e.target.checked)} /> I don&apos;t have a move date yet</label>
           </div>
           <button disabled={!validStep1} onClick={() => setStep(2)} className="bg-brand-yellow text-ink font-display font-bold px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-0.5 transition">Next: Inventory →</button>
@@ -212,31 +226,97 @@ export default function QuoteWizard() {
             </div>
           </div>
 
+          {/* room tabs — jump around; badge shows what's already added */}
+          <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1">
+            {INVENTORY.map((r, i) => {
+              const n = roomCount(r);
+              return (
+                <button
+                  key={r.room}
+                  onClick={() => setRoomIdx(i)}
+                  className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[.78rem] font-semibold whitespace-nowrap transition ${i === roomIdx ? "bg-navy text-white" : "bg-soft text-muted hover:bg-softblue"}`}
+                >
+                  {r.room}
+                  {n > 0 && <span className="px-1.5 rounded bg-brand-yellow text-ink text-[.68rem]">{n}</span>}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* current room, with each item's own price */}
           <div>
-            <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1">
-              {INVENTORY.map((r) => (
-                <button key={r.room} onClick={() => setActiveRoom(r.room)} className={`shrink-0 px-3 py-1.5 rounded-lg text-[.78rem] font-semibold whitespace-nowrap ${activeRoom === r.room ? "bg-navy text-white" : "bg-soft text-muted"}`}>{r.room}</button>
-              ))}
+            <div className="flex items-baseline justify-between mb-1.5">
+              <h4 className="font-display font-bold text-ink text-[1.05rem]">{room.room}</h4>
+              <span className="text-[.74rem] text-muted">Room {roomIdx + 1} of {INVENTORY.length}</span>
             </div>
-            <div className="mt-3 flex flex-col gap-1.5 max-h-[320px] sm:max-h-[220px] overflow-y-auto overscroll-contain pr-1">
-              {INVENTORY.find((r) => r.room === activeRoom).items.map((it) => (
-                <div key={it.id} className="flex items-center justify-between gap-3 py-2 border-b border-line last:border-0">
-                  <span className="text-[.9rem] text-ink min-w-0">{it.label}</span>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button aria-label={`Remove one ${it.label}`} onClick={() => bump(it.id, -1)} className="w-9 h-9 sm:w-7 sm:h-7 rounded-lg bg-soft text-ink font-bold text-[1.05rem] sm:text-[1rem] active:scale-95 transition">−</button>
-                    <span className="w-6 text-center font-semibold text-ink tabular-nums">{inventory[it.id] || 0}</span>
-                    <button aria-label={`Add one ${it.label}`} onClick={() => bump(it.id, 1)} className="w-9 h-9 sm:w-7 sm:h-7 rounded-lg bg-brand-yellow text-ink font-bold text-[1.05rem] sm:text-[1rem] active:scale-95 transition">+</button>
+
+            <div className="flex flex-col gap-1 max-h-[330px] sm:max-h-[260px] overflow-y-auto overscroll-contain pr-1">
+              {room.items.map((it) => {
+                const qty = inventory[it.id] || 0;
+                return (
+                  <div
+                    key={it.id}
+                    className={`flex items-center justify-between gap-3 py-2 px-2 -mx-1 rounded-lg transition ${qty ? "bg-brand-yellow/15" : ""}`}
+                  >
+                    <span className="min-w-0">
+                      <span className="block text-[.9rem] text-ink leading-tight">{it.label}</span>
+                      <span className="block text-[.78rem] text-muted">
+                        £{money(it.price)} each{qty > 1 ? ` · £${money(it.price * qty)} total` : ""}
+                      </span>
+                    </span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button aria-label={`Remove one ${it.label}`} onClick={() => bump(it.id, -1)} className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-soft text-ink font-bold text-[1.05rem] active:scale-95 transition">−</button>
+                      <span className="w-6 text-center font-semibold text-ink tabular-nums">{qty}</span>
+                      <button aria-label={`Add one ${it.label}`} onClick={() => bump(it.id, 1)} className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-brand-yellow text-ink font-bold text-[1.05rem] active:scale-95 transition">+</button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
+
+            {/* walk them through every room */}
+            <div className="flex items-center gap-2 mt-3">
+              <button
+                onClick={() => setRoomIdx((i) => Math.max(0, i - 1))}
+                disabled={roomIdx === 0}
+                className="flex-1 border-2 border-line text-ink font-display font-bold px-3 py-2.5 rounded-xl text-[.9rem] disabled:opacity-40"
+              >
+                ← Previous
+              </button>
+              <button
+                onClick={() => setRoomIdx((i) => Math.min(INVENTORY.length - 1, i + 1))}
+                disabled={roomIdx === INVENTORY.length - 1}
+                className="flex-[1.4] bg-navy text-white font-display font-bold px-3 py-2.5 rounded-xl text-[.9rem] disabled:opacity-40"
+              >
+                Next room →
+              </button>
+            </div>
+          </div>
+
+          {/* anything that isn't on the list */}
+          <div>
+            <label className={lab}>Any other items?</label>
+            <textarea
+              rows={2}
+              className={field}
+              placeholder="Not on the list? Tell us here — e.g. fish tank, gym rack, 2 bikes…"
+              value={otherItems}
+              onChange={(e) => setOtherItems(e.target.value)}
+            />
+            <span className="block text-[.74rem] text-muted mt-1">We&apos;ll price these when we confirm your quote.</span>
+          </div>
+
+          {/* running total of what they've picked */}
+          <div className="flex items-center justify-between bg-softblue rounded-xl px-4 py-3">
+            <span className="text-[.85rem] text-muted">{itemCount} item{itemCount === 1 ? "" : "s"} selected</span>
+            <span className="font-display font-bold text-ink">£{money(itemsTotal)}</span>
           </div>
 
           <div className="flex gap-2">
             <button onClick={() => setStep(1)} className="flex-1 border-2 border-ink text-ink font-display font-bold px-4 py-3 rounded-xl">← Back</button>
             <button onClick={() => setStep(3)} className="flex-[2] bg-brand-yellow text-ink font-display font-bold px-4 py-3 rounded-xl hover:-translate-y-0.5 transition">Next: Your Details →</button>
           </div>
-          <p className="text-[.74rem] text-muted text-center">{itemCount} item{itemCount === 1 ? "" : "s"} added · you can skip items you're unsure about</p>
+          <p className="text-[.74rem] text-muted text-center">Go through each room — skip anything you&apos;re unsure about.</p>
         </div>
       )}
 

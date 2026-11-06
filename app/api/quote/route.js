@@ -112,7 +112,7 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
 async function sendEmails(ctx) {
   const key = process.env.RESEND_API_KEY;
   const to = process.env.QUOTE_TO_EMAIL || "Vmtofficials@gmail.com";
-  const from = process.env.QUOTE_FROM_EMAIL || "Van Hero Quotes <onboarding@resend.dev>";
+  const from = process.env.QUOTE_FROM_EMAIL || "Van Hero Quotes <quotes@vanhero.online>";
   if (!key) return { sent: false, office: false, customer: false, reason: "RESEND_API_KEY not set" };
 
   const send = (payload) =>
@@ -149,6 +149,7 @@ export async function POST(req) {
     const extras = body.extras || body.packing || [];
     const notes = String(body.notes || "").slice(0, 2000);
     const service = String(body.service || "").slice(0, 120);
+    const otherItems = String(body.otherItems || "").slice(0, 1000);
 
     const d = await drivingMiles(pickup.postcode, delivery.postcode);
     const size = pickup.size || delivery.size || "2 Bed House";
@@ -168,7 +169,7 @@ export async function POST(req) {
         kind: isEnquiry ? "enquiry" : "quote",
         quote: isEnquiry ? null : total,
         breakdown: isEnquiry ? [] : breakdown,
-        miles: d.miles, lead, inventory, extras, notes,
+        miles: d.miles, lead, inventory, extras, notes, otherItems,
       });
       emailed = res.sent;
     }
