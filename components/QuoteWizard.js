@@ -155,11 +155,10 @@ export default function QuoteWizard() {
         )}
         <div className="font-display font-black text-brand-blue text-[3rem] leading-none my-3">£{Number(result.quote).toFixed(2)}</div>
         <p className="text-muted text-[.9rem]">Estimated guide price{result.miles ? ` · ${result.miles} miles` : ""}. A Van Hero will be in touch shortly to confirm. Quote your reference when you call.</p>
-        <div className="mt-5 text-left max-w-[320px] mx-auto">
-          {result.breakdown?.map((b, i) => (
-            <div key={i} className="flex justify-between text-[.85rem] py-1 border-b border-line last:border-0"><span className="text-muted">{b.label}</span><span className="font-semibold text-ink">£{Number(b.amount).toFixed(2)}</span></div>
-          ))}
-        </div>
+        <p className="text-[.82rem] text-muted2 mt-4 max-w-[340px] mx-auto">
+          Includes mileage, handling and VAT. We&apos;ll confirm the final price once we&apos;ve
+          checked access, heavy items and parking.
+        </p>
         <a href="tel:+447847117933" className="mt-6 inline-flex bg-brand-yellow text-ink font-display font-bold px-6 py-3 rounded-xl">Call to confirm →</a>
       </div>
     );
