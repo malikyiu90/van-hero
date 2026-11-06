@@ -1,4 +1,5 @@
 import { RATES } from "@/lib/rates";
+import { makeReference, officeHtml, customerHtml } from "@/lib/quoteEmail";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -108,25 +109,11 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
 }
 
 /* ---------- email via Resend ---------- */
-async function sendEmails({ lead, quote, breakdown, miles }) {
+async function sendEmails(ctx) {
   const key = process.env.RESEND_API_KEY;
   const to = process.env.QUOTE_TO_EMAIL || "Vmtofficials@gmail.com";
   const from = process.env.QUOTE_FROM_EMAIL || "Van Hero Quotes <onboarding@resend.dev>";
-  if (!key) return { sent: false, reason: "RESEND_API_KEY not set" };
-
-  const rows = breakdown.map((b) => `<tr><td style="padding:4px 10px">${b.label}</td><td style="padding:4px 10px;text-align:right">£${b.amount}</td></tr>`).join("");
-  const leadHtml = `
-    <div style="font-family:Arial,sans-serif;color:#040542">
-      <h2>New Quote Request — £${quote}</h2>
-      <p><strong>${lead.name || "—"}</strong> · ${lead.phone || "—"} · ${lead.email || "—"}</p>
-      <p>From <strong>${lead.pickup?.postcode || "—"}</strong> (${lead.pickup?.size || lead.pickup?.type || "—"})
-         → <strong>${lead.delivery?.postcode || "—"}</strong> (${lead.delivery?.size || lead.delivery?.type || "—"})</p>
-      <p>Distance: ${miles ?? "—"} mi · Move date: ${lead.moveDate || "flexible"}</p>
-      <table style="border-collapse:collapse;border:1px solid #e6ebf3;margin-top:8px">${rows}
-        <tr><td style="padding:6px 10px;font-weight:bold;border-top:1px solid #e6ebf3">Estimated total</td>
-            <td style="padding:6px 10px;text-align:right;font-weight:bold;border-top:1px solid #e6ebf3">£${quote}</td></tr>
-      </table>
-    </div>`;
+  if (!key) return { sent: false, office: false, customer: false, reason: "RESEND_API_KEY not set" };
 
   const send = (payload) =>
     fetch("https://api.resend.com/emails", {
@@ -135,15 +122,24 @@ async function sendEmails({ lead, quote, breakdown, miles }) {
       body: JSON.stringify(payload),
     }).then((r) => r.ok).catch(() => false);
 
-  const results = [];
-  results.push(await send({ from, to, subject: `New quote £${quote} — ${lead.name || "Website lead"}`, html: leadHtml }));
+  const { reference, quote, lead, kind } = ctx;
+  const label = quote != null ? ` — £${quote}` : "";
+  const office = await send({
+    from, to,
+    reply_to: lead.email || undefined,
+    subject: `${reference}${label} — ${lead.name || "Website lead"}`,
+    html: officeHtml(ctx),
+  });
+
+  let customer = false;
   if (lead.email) {
-    const custHtml = `<div style="font-family:Arial,sans-serif;color:#040542"><h2>Thanks${lead.name ? `, ${lead.name}` : ""}! 🚐</h2>
-      <p>Your Van Hero quote request has been received. Your estimated guide price is <strong>£${quote}</strong>.</p>
-      <p>A Van Hero will be in touch shortly to confirm the details. Need us sooner? Call <strong>+44 7847 117933</strong>.</p></div>`;
-    results.push(await send({ from, to: lead.email, subject: "Your Van Hero quote has been booked", html: custHtml }));
+    customer = await send({
+      from, to: lead.email,
+      subject: `Your Van Hero ${kind === "enquiry" ? "enquiry" : "quote"} ${reference}${label}`,
+      html: customerHtml(ctx),
+    });
   }
-  return { sent: results.some(Boolean) };
+  return { sent: office || customer, office, customer };
 }
 
 export async function POST(req) {
@@ -151,20 +147,39 @@ export async function POST(req) {
     const body = await req.json();
     const { pickup = {}, delivery = {}, inventory = {}, contact = {}, moveDate = "", mode = "quote", hours = 0, crew = 0 } = body;
     const extras = body.extras || body.packing || [];
+    const notes = String(body.notes || "").slice(0, 2000);
+    const service = String(body.service || "").slice(0, 120);
 
     const d = await drivingMiles(pickup.postcode, delivery.postcode);
     const size = pickup.size || delivery.size || "2 Bed House";
     const { total, breakdown } = computePrice({ size, inventory, miles: d.miles, pickup, delivery, extras, hours, crew });
 
     // "preview" mode just returns the price + distance (no email); "quote" mode (final submit) emails the lead.
+    // "preview" = price only (no email). "quote" = full calculator submit.
+    // "enquiry" = simple service-page form: email the office, no price shown.
     let emailed = false;
-    if (mode === "quote") {
-      const lead = { ...contact, pickup, delivery, moveDate, miles: d.miles };
-      const res = await sendEmails({ lead, quote: total, breakdown, miles: d.miles });
+    let reference = null;
+    if (mode === "quote" || mode === "enquiry") {
+      reference = makeReference();
+      const isEnquiry = mode === "enquiry";
+      const lead = { ...contact, pickup, delivery, moveDate, miles: d.miles, hours, crew, service };
+      const res = await sendEmails({
+        reference,
+        kind: isEnquiry ? "enquiry" : "quote",
+        quote: isEnquiry ? null : total,
+        breakdown: isEnquiry ? [] : breakdown,
+        miles: d.miles, lead, inventory, extras, notes,
+      });
       emailed = res.sent;
     }
 
-    return Response.json({ ok: true, quote: total, miles: d.miles, breakdown, emailed });
+    return Response.json({
+      ok: true,
+      quote: mode === "enquiry" ? null : total,
+      miles: d.miles,
+      breakdown: mode === "enquiry" ? [] : breakdown,
+      emailed, reference,
+    });
   } catch (e) {
     return Response.json({ ok: false, error: "Could not calculate quote." }, { status: 400 });
   }

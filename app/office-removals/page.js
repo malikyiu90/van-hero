@@ -49,6 +49,7 @@ const data = {
     { q: "Can you clear old office furniture and IT after the move?", a: "Yes. We can remove and responsibly recycle old desks, chairs and electrical equipment as part of the move, and provide the paperwork for your records." },
   ],
   form: { pill: "★ Office Removals", title: "Book a Free Office Survey", subtitle: "Fixed-price commercial relocations, out of hours." },
+  quoteWizard: true,   // show the full price calculator on this page
 };
 
 export default function Page() {

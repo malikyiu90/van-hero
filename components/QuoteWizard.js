@@ -42,6 +42,7 @@ export default function QuoteWizard() {
   const [activeRoom, setActiveRoom] = useState(INVENTORY[0].room);
   const [extras, setExtras] = useState([]);
   const [contact, setContact] = useState({ name: "", phone: "", email: "" });
+  const [notes, setNotes] = useState("");
   const [miles, setMiles] = useState(null);
   const [coords, setCoords] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -108,7 +109,7 @@ export default function QuoteWizard() {
     try {
       const r = await fetch("/api/quote", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pickup, delivery, inventory, extras, contact, moveDate: noDate ? "flexible" : moveDate, mode: "quote" }),
+        body: JSON.stringify({ pickup, delivery, inventory, extras, contact, notes, moveDate: noDate ? "flexible" : moveDate, mode: "quote" }),
       });
       const j = await r.json();
       if (j.ok) setResult(j); else setError(j.error || "Something went wrong.");
@@ -125,8 +126,14 @@ export default function QuoteWizard() {
       <div className="min-w-0 bg-white rounded-2xl p-6 md:p-8 shadow-[0_40px_80px_-40px_rgba(0,0,0,.7)] text-center">
         <div className="text-3xl">✅</div>
         <h3 className="font-display font-bold text-ink text-[1.4rem] mt-2">Your quote is booked!</h3>
+        {result.reference && (
+          <div className="mt-2">
+            <div className="text-[.75rem] uppercase tracking-wide text-muted">Your reference</div>
+            <div className="inline-block mt-1 bg-brand-yellow text-ink font-display font-bold px-4 py-1.5 rounded-lg">{result.reference}</div>
+          </div>
+        )}
         <div className="font-display font-black text-brand-blue text-[3rem] leading-none my-3">£{result.quote}</div>
-        <p className="text-muted text-[.9rem]">Estimated guide price{result.miles ? ` · ${result.miles} miles` : ""}. A Van Hero will be in touch shortly to confirm.</p>
+        <p className="text-muted text-[.9rem]">Estimated guide price{result.miles ? ` · ${result.miles} miles` : ""}. A Van Hero will be in touch shortly to confirm. Quote your reference when you call.</p>
         <div className="mt-5 text-left max-w-[320px] mx-auto">
           {result.breakdown?.map((b, i) => (
             <div key={i} className="flex justify-between text-[.85rem] py-1 border-b border-line last:border-0"><span className="text-muted">{b.label}</span><span className="font-semibold text-ink">£{b.amount}</span></div>
@@ -240,6 +247,16 @@ export default function QuoteWizard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div><label className={lab}>Phone *</label><input className={field} inputMode="tel" value={contact.phone} onChange={(e) => setContact((c) => ({ ...c, phone: e.target.value }))} placeholder="07123 456 789" /></div>
             <div><label className={lab}>Email *</label><input type="email" className={field} value={contact.email} onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))} placeholder="john@example.com" /></div>
+          </div>
+          <div>
+            <label className={lab}>Anything else we should know?</label>
+            <textarea
+              rows={3}
+              className={field}
+              placeholder="Stairs, lift, parking, heavy or fragile items, access problems — tell us as much as you can."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
           </div>
           <div>
             <div className={lab}>Add-ons (optional)</div>

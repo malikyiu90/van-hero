@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Testimonials from "@/components/Testimonials";
 import ManVanForm from "@/components/ManVanForm";
 import { HowItWorks } from "@/components/Sections";
+import QuoteSection from "@/components/QuoteSection";
 import { posts, areas } from "@/lib/data";
 
 const DEFAULT_TRUST = ["Same Day Available", "Rated 4.9/5 by Customers", "On Time, Every Time", "Experienced Local Crew"];
@@ -15,7 +16,7 @@ export default function ServicePage({ data }) {
     sectionHeading, sectionImage, sectionParas = [], features = [],
     pricingIntro, pricingCols = ["Move Size", "Start From", "Van Type", "Crew"], pricing,
     faqHeading, faqIntro = "Everything you need to know. Still got a question? Just call or message us.", faqs = [],
-    form = {}, trust = DEFAULT_TRUST, tipsHeading = "Moving & Packing Tips",
+    form = {}, trust = DEFAULT_TRUST, tipsHeading = "Moving & Packing Tips", quoteWizard = false,
   } = data;
 
   return (
@@ -77,7 +78,7 @@ export default function ServicePage({ data }) {
             </div>
           </div>
 
-          <aside className="lg:sticky lg:top-24 h-max flex flex-col gap-4" id="quote">
+          <aside className="lg:sticky lg:top-24 h-max flex flex-col gap-4" id={quoteWizard ? "enquiry" : "quote"}>
             <ManVanForm {...form} />
             <div className="bg-navy rounded-2xl p-5 flex flex-col gap-3">
               <a href="tel:+447847117933" className="inline-flex items-center justify-center gap-2 border-2 border-white/40 text-white font-display font-bold px-5 py-3 rounded-xl hover:bg-white/10 transition">📞 Call +44 7847 117933</a>
@@ -129,6 +130,9 @@ export default function ServicePage({ data }) {
           </div>
         </section>
       )}
+
+      {/* instant price calculator — only on the pages that opt in */}
+      {quoteWizard && <QuoteSection />}
 
       {/* how it works — shared 4-step design (matches homepage + vanhero.online) */}
       <HowItWorks />

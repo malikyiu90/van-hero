@@ -50,6 +50,7 @@ const data = {
     { q: "Do you move long distance, or just locally?", a: "Both. We cover Coventry and Warwickshire for local moves, and we also handle longer relocations right across the UK." },
   ],
   form: { pill: "★ Local Moving", title: "60-Second Local Move Quote", subtitle: "Fully insured crews — get a fixed price upfront." },
+  quoteWizard: true,   // show the full price calculator on this page
 };
 
 export default function Page() {
