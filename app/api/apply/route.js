@@ -116,12 +116,24 @@ export async function POST(req) {
         </div>
       </div>`;
 
-      const send = (payload) =>
-        fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }).then((r) => r.ok).catch(() => false);
+      async function send(payload, label) {
+        for (let attempt = 1; attempt <= 2; attempt++) {
+          try {
+            const r = await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+              signal: AbortSignal.timeout(20000),
+            });
+            if (r.ok) return true;
+            const body = await r.text().catch(() => "");
+            console.error(`[apply] ${label} failed (attempt ${attempt}, HTTP ${r.status}): ${body.slice(0, 300)}`);
+          } catch (e) {
+            console.error(`[apply] ${label} threw (attempt ${attempt}): ${e?.message || e}`);
+          }
+        }
+        return false;
+      }
 
       const office = await send({
         from, to, reply_to: a.email || undefined,
@@ -132,13 +144,17 @@ export async function POST(req) {
           : {}),
       });
       const applicant = a.email
-        ? await send({ from, to: a.email, subject: `Your Van Hero application ${reference}`, html: applicantHtml })
+        ? await send({ from, to: a.email, subject: `Your Van Hero application ${reference}`, html: applicantHtml }, "applicant")
         : false;
       emailed = office || applicant;
+      if (!emailed) {
+        console.error(`[apply] ${reference} NOT EMAILED — applicant: ${a.name} ${a.phone} ${a.email}`);
+      }
     }
 
     return Response.json({ ok: true, reference, emailed });
-  } catch {
+  } catch (e) {
+    console.error("[apply] request failed:", e?.message || e);
     return Response.json({ ok: false, error: "Could not submit your application." }, { status: 400 });
   }
 }

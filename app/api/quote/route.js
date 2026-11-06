@@ -9,7 +9,10 @@ async function coords(pc) {
   const clean = String(pc || "").trim();
   if (!clean) return null;
   try {
-    const r = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(clean)}`, { cache: "no-store" });
+    const r = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(clean)}`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000),
+    });
     if (!r.ok) return null;
     const j = await r.json();
     if (j.status !== 200 || !j.result) return null;
@@ -38,6 +41,7 @@ async function drivingMiles(from, to) {
         method: "POST",
         headers: { Authorization: key, "Content-Type": "application/json" },
         body: JSON.stringify({ coordinates: [[a.lon, a.lat], [b.lon, b.lat]] }),
+        signal: AbortSignal.timeout(8000),
       });
       if (r.ok) {
         const j = await r.json();
@@ -64,8 +68,21 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
   // Labour = hours x crew hourly rate. These are manual inputs in the VMT
   // sheet and default to 0 there, so we do the same: no hours/crew = no
   // labour charge. The office fills them in when confirming the quote.
-  const h = Math.max(0, Number(hours) || 0);
-  const c = Math.max(0, Math.min(4, Math.round(Number(crew) || 0)));
+  // Work out the hours the way a human quoting this job would: how long the
+  // crew spends driving to the address, plus loading and unloading it. The
+  // office can still override both by passing hours/crew explicitly.
+  const driveHours = miles ? Math.round((miles / RATES.avgSpeedMph) * 2) / 2 : 0;
+  const handling = RATES.handling[size] ?? RATES.defaultHandling;
+  const estimatedHours = Math.round((driveHours + handling) * 2) / 2;
+
+  const explicitHours = Number(hours) > 0;
+  const h = explicitHours ? Math.max(0, Number(hours)) : estimatedHours;
+
+  const explicitCrew = Number(crew) > 0;
+  const c = explicitCrew
+    ? Math.max(1, Math.min(4, Math.round(Number(crew))))
+    : (RATES.crewFor[size] ?? RATES.defaultCrew);
+
   const hourly = RATES.crewHourly[c] ?? RATES.crewHourly[4];
   const labour = money(h * hourly);
 
@@ -80,7 +97,12 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
 
   if (labour > 0) {
     subtotal += labour;
-    breakdown.push({ label: `Labour (${h}h x ${c} crew)`, amount: labour });
+    breakdown.push({
+      label: driveHours && !explicitHours
+        ? `Labour (${h}h x ${c} crew — ${driveHours}h travel + ${handling}h handling)`
+        : `Labour (${h}h x ${c} crew)`,
+      amount: labour,
+    });
   }
 
   // mileage
@@ -127,12 +149,25 @@ async function sendEmails(ctx) {
   const from = process.env.QUOTE_FROM_EMAIL || "Van Hero Quotes <quotes@vanhero.online>";
   if (!key) return { sent: false, office: false, customer: false, reason: "RESEND_API_KEY not set" };
 
-  const send = (payload) =>
-    fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    }).then((r) => r.ok).catch(() => false);
+  // A swallowed send is a lost lead, so failures are logged and retried once.
+  async function send(payload, label) {
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const r = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(12000),
+        });
+        if (r.ok) return true;
+        const body = await r.text().catch(() => "");
+        console.error(`[quote] ${label} email failed (attempt ${attempt}, HTTP ${r.status}): ${body.slice(0, 300)}`);
+      } catch (e) {
+        console.error(`[quote] ${label} email threw (attempt ${attempt}): ${e?.message || e}`);
+      }
+    }
+    return false;
+  }
 
   const { reference, quote, lead, kind } = ctx;
   const label = quote != null ? ` — £${Number(quote).toFixed(2)}` : "";
@@ -141,7 +176,7 @@ async function sendEmails(ctx) {
     reply_to: lead.email || undefined,
     subject: `${reference}${label} — ${lead.name || "Website lead"}`,
     html: officeHtml(ctx),
-  });
+  }, "office");
 
   let customer = false;
   if (lead.email) {
@@ -149,7 +184,7 @@ async function sendEmails(ctx) {
       from, to: lead.email,
       subject: `Your Van Hero ${kind === "enquiry" ? "enquiry" : "quote"} ${reference}${label}`,
       html: customerHtml(ctx),
-    });
+    }, "customer");
   }
   return { sent: office || customer, office, customer };
 }
@@ -176,14 +211,23 @@ export async function POST(req) {
       reference = makeReference();
       const isEnquiry = mode === "enquiry";
       const lead = { ...contact, pickup, delivery, moveDate, miles: d.miles, hours, crew, service };
-      const res = await sendEmails({
-        reference,
-        kind: isEnquiry ? "enquiry" : "quote",
-        quote: isEnquiry ? null : total,
-        breakdown: isEnquiry ? [] : breakdown,
-        miles: d.miles, lead, inventory, extras, notes, otherItems,
-      });
-      emailed = res.sent;
+      try {
+        const res = await sendEmails({
+          reference,
+          kind: isEnquiry ? "enquiry" : "quote",
+          quote: isEnquiry ? null : total,
+          breakdown: isEnquiry ? [] : breakdown,
+          miles: d.miles, lead, inventory, extras, notes, otherItems,
+        });
+        emailed = res.sent;
+      } catch (e) {
+        // The customer still gets their price and reference; we log loudly so
+        // the lead can be chased from the server logs.
+        console.error(`[quote] ${reference} email step failed entirely:`, e?.message || e);
+      }
+      if (!emailed) {
+        console.error(`[quote] ${reference} NOT EMAILED — lead: ${contact?.name || "?"} ${contact?.phone || ""} ${contact?.email || ""} — £${total}`);
+      }
     }
 
     return Response.json({
@@ -194,6 +238,7 @@ export async function POST(req) {
       emailed, reference,
     });
   } catch (e) {
+    console.error("[quote] request failed:", e?.message || e);
     return Response.json({ ok: false, error: "Could not calculate quote." }, { status: 400 });
   }
 }
