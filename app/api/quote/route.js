@@ -51,7 +51,7 @@ async function drivingMiles(from, to) {
 /* ---------- pricing engine (exact V.M.T Excel model) ---------- */
 const floorNum = (f) => ({ "Ground floor": 0, "1st floor": 1, "2nd floor": 2, "3rd floor": 3, "4th+ floor": 4 }[f] || 0);
 
-function computePrice({ size, inventory, miles, pickup, delivery, extras }) {
+function computePrice({ size, inventory, miles, pickup, delivery, extras, hours, crew }) {
   const breakdown = [];
   let subtotal = 0;
 
@@ -59,11 +59,17 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras }) {
   subtotal += RATES.baseCallout;
   breakdown.push({ label: "Base charge", amount: RATES.baseCallout });
 
-  // labour = hours × crew hourly rate (crew + hours estimated from property size)
-  const est = RATES.estimate[size] || RATES.defaultEstimate;
-  const labour = est.hours * (RATES.crewHourly[est.crew] || 40);
-  subtotal += labour;
-  breakdown.push({ label: `Labour (${est.hours}h × ${est.crew} crew)`, amount: labour });
+  // Labour = hours x crew hourly rate. These are manual inputs in the VMT
+  // sheet and default to 0 there, so we do the same: no hours/crew = no
+  // labour charge. The office fills them in when confirming the quote.
+  const h = Math.max(0, Number(hours) || 0);
+  const c = Math.max(0, Math.min(4, Math.round(Number(crew) || 0)));
+  const hourly = RATES.crewHourly[c] ?? RATES.crewHourly[4];
+  const labour = Math.round(h * hourly);
+  if (labour > 0) {
+    subtotal += labour;
+    breakdown.push({ label: `Labour (${h}h x ${c} crew)`, amount: labour });
+  }
 
   // mileage
   if (miles) {
@@ -143,12 +149,12 @@ async function sendEmails({ lead, quote, breakdown, miles }) {
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { pickup = {}, delivery = {}, inventory = {}, contact = {}, moveDate = "", mode = "quote" } = body;
+    const { pickup = {}, delivery = {}, inventory = {}, contact = {}, moveDate = "", mode = "quote", hours = 0, crew = 0 } = body;
     const extras = body.extras || body.packing || [];
 
     const d = await drivingMiles(pickup.postcode, delivery.postcode);
     const size = pickup.size || delivery.size || "2 Bed House";
-    const { total, breakdown } = computePrice({ size, inventory, miles: d.miles, pickup, delivery, extras });
+    const { total, breakdown } = computePrice({ size, inventory, miles: d.miles, pickup, delivery, extras, hours, crew });
 
     // "preview" mode just returns the price + distance (no email); "quote" mode (final submit) emails the lead.
     let emailed = false;
