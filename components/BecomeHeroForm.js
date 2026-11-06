@@ -64,7 +64,7 @@ export default function BecomeHeroForm() {
           Our driver coordinator will review your details and be in touch within 48 hours.
         </p>
         <p className="text-muted text-[.85rem] mt-2">
-          Quote this reference when you call <strong className="text-ink">+44 7847 117933</strong>.
+          Mention this reference when you call <strong className="text-ink">+44 7847 117933</strong>.
         </p>
       </div>
     );

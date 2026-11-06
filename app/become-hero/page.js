@@ -3,7 +3,6 @@ import Nav from "@/components/Nav";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import BecomeHeroForm from "@/components/BecomeHeroForm";
-import { HowItWorks } from "@/components/Sections";
 
 export const metadata = {
   title: "Van Driver & Removals Jobs in Coventry — Become a Van Hero",
@@ -320,7 +319,6 @@ export default function BecomeHeroPage() {
         </div>
       </section>
 
-      <HowItWorks />
       <Newsletter />
       <Footer />
     </main>

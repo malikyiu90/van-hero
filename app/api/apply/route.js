@@ -38,7 +38,8 @@ export async function POST(req) {
 
     const key = process.env.RESEND_API_KEY;
     const to = process.env.QUOTE_TO_EMAIL || "Vmtofficials@gmail.com";
-    const from = process.env.QUOTE_FROM_EMAIL || "Van Hero Quotes <quotes@vanhero.online>";
+    // Driver applications come from Careers, not the quotes mailbox.
+    const from = process.env.APPLY_FROM_EMAIL || "Van Hero Careers <careers@vanhero.online>";
     let emailed = false;
 
     if (key) {
@@ -78,7 +79,7 @@ export async function POST(req) {
         <div style="border:1px solid #e6ebf3;border-top:0;border-radius:0 0 12px 12px;padding:16px 20px">
           <p>We&rsquo;ve received your application to drive with Van Hero as <strong>${esc(a.role || "a driver")}</strong>.</p>
           <p>Our driver coordinator will review your details and be in touch <strong>within 48 hours</strong> for a quick document check and a chat.</p>
-          <p style="margin-top:14px">Any questions? Call <strong>+44 7847 117933</strong> and quote <strong>${esc(reference)}</strong>.</p>
+          <p style="margin-top:14px">Any questions? Call <strong>+44 7847 117933</strong> and mention <strong>${esc(reference)}</strong>.</p>
         </div>
       </div>`;
 
