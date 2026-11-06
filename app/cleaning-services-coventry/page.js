@@ -10,10 +10,10 @@ const data = {
   pill: "Licensed Waste Carrier",
   title: "Waste Management & Recycling in UK",
   intro: "Eco-friendly, fully licensed waste collection and disposal services across the West Midlands. Reliable same-day solutions for residential and commercial requirements.",
-  heroImage: "/moves/garden.webp",
+  heroImage: "/services/waste.webp",
   heroBadge: "Same-Day Response",
   sectionHeading: "Complete Waste Management Across UK",
-  sectionImage: "/services/manvan.webp",
+  sectionImage: "/services/waste-sorted.webp",
   sectionParas: [
     "As a fully EA-licensed waste carrier, Van Hero collects, transports and disposes of your waste safely, legally and responsibly. From a few black bags to a complete van load, we handle residential and commercial waste with no skip hire, no permits and no heavy lifting on your part.",
     "We aim to recycle or repurpose over 90% of everything we collect, sorting recyclables, donating reusable items and sending only what's genuinely unusable to licensed disposal. Every collection comes with the paperwork to prove your waste was handled correctly.",

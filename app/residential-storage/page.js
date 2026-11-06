@@ -10,10 +10,10 @@ const data = {
   pill: "Free Collection • 24/7 Access",
   title: "Residential Storage, On Your Terms",
   intro: "Secure, clean and dry storage for your home — whether you're moving, decluttering or renovating. We'll collect your belongings from your door, store them safely and give you 24/7 access whenever you need them.",
-  heroImage: "/services/storage.webp",
+  heroImage: "/services/storage-units.webp",
   heroBadge: "Free Collection",
   sectionHeading: "Residential Storage at Your Home, On Your Terms",
-  sectionImage: "/services/manvan.webp",
+  sectionImage: "/services/home-move.webp",
   sectionParas: [
     "Life doesn't always fit in one place. Whether you're between homes, making room for a new arrival, renovating, or simply decluttering, our clean and individually alarmed units give your belongings a safe second home for as long as you need.",
     "Book a unit for 12+ weeks and our crew will collect from your door for free — no van hire, no heavy lifting. Everything sits inside a secure, gated, CCTV-monitored facility with 24/7 access, so you can come and go whenever suits you.",

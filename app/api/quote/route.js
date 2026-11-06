@@ -56,10 +56,6 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
   const breakdown = [];
   let subtotal = 0;
 
-  // base call-out
-  subtotal += RATES.baseCallout;
-  breakdown.push({ label: "Base charge", amount: RATES.baseCallout });
-
   // Labour = hours x crew hourly rate. These are manual inputs in the VMT
   // sheet and default to 0 there, so we do the same: no hours/crew = no
   // labour charge. The office fills them in when confirming the quote.
@@ -67,6 +63,16 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
   const c = Math.max(0, Math.min(4, Math.round(Number(crew) || 0)));
   const hourly = RATES.crewHourly[c] ?? RATES.crewHourly[4];
   const labour = Math.round(h * hourly);
+
+  // Base call-out is waived on short jobs: up to SHORT_JOB_HOURS the labour
+  // stands on its own, beyond that the call-out applies on top. With no hours
+  // quoted yet we leave the call-out on, which matches the blank sheet (£48).
+  const shortJob = h > 0 && h <= RATES.shortJobHours;
+  if (!shortJob) {
+    subtotal += RATES.baseCallout;
+    breakdown.push({ label: "Base charge", amount: RATES.baseCallout });
+  }
+
   if (labour > 0) {
     subtotal += labour;
     breakdown.push({ label: `Labour (${h}h x ${c} crew)`, amount: labour });

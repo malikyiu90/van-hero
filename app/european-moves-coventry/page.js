@@ -10,10 +10,10 @@ const data = {
   pill: "UK to Europe Removals",
   title: "Removals from UK to Europe",
   intro: "Door-to-door moves from UK to France, Germany, Spain, Italy and beyond.",
-  heroImage: "/services/manvan-hero.webp",
+  heroImage: "/services/european-road.webp",
   heroBadge: "Door-to-Door",
   sectionHeading: "Door-to-Door European Removals from UK",
-  sectionImage: "/services/manvan.webp",
+  sectionImage: "/services/european.webp",
   sectionParas: [
     "Moving abroad is more than just a logistical challenge; it's the start of a new chapter. At Van Hero, we specialize in bridging the gap between your life in Coventry and your new destination in Europe. Whether you're heading to a coastal villa in Spain or a city apartment in Berlin, our \"Capable Care\" approach ensures your belongings are handled with the same respect we'd give our own family's possessions.",
     "We manage the entire international journey. From navigating post-Brexit customs documentation to coordinating with our trusted local partner networks across the continent, our Coventry-based team takes the weight off your shoulders. We offer a seamless, door-to-door service that eliminates the stress of multi-modal transport and complex storage arrangements.",

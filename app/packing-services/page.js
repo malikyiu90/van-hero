@@ -10,10 +10,10 @@ const data = {
   pill: "Professional Packing Service",
   title: "Professional Packing Services",
   intro: "Let our experienced team take care of the packing. We use quality packing materials and handle every item with care, so you can move with less stress and complete peace of mind.",
-  heroImage: "/services/packaging.webp",
+  heroImage: "/services/packing-labelled.webp",
   heroBadge: "Same Day Available",
   sectionHeading: "Leave the Packing to the Professionals",
-  sectionImage: "/services/manvan.webp",
+  sectionImage: "/services/kitchen-move.webp",
   sectionParas: [
     "Packing an entire home takes time, patience and the right materials. Let Van Hero take care of it for you. Our experienced packing team carefully wraps, protects and labels every item, so everything arrives organised, secure and ready to unpack.",
     "We use professional packing materials, including double-walled boxes, heavy-duty tape, protective blankets and specialist wrapping for fragile items. Every item is packed with the same care we'd use for our own belongings.",

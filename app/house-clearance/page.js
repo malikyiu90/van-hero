@@ -10,10 +10,10 @@ const data = {
   pill: "House Clearance in UK",
   title: "House Clearance",
   intro: "From single rooms to full property clearances, Van Hero provides fast, professional house clearance services across UK. We're fully insured, licensed waste carriers who recycle over 85% of everything we collect. Every clearance includes a waste transfer note, giving you complete peace of mind that your items are disposed of responsibly.",
-  heroImage: "/moves/garden.webp",
+  heroImage: "/services/clearance-room.webp",
   heroBadge: "Licensed Waste Carrier",
   sectionHeading: "UK's Trusted House Clearance Company",
-  sectionImage: "/services/manvan.webp",
+  sectionImage: "/services/clearance.webp",
   sectionParas: [
     "Van Hero takes the stress out of house clearance, whatever the size of the job. Whether it's a single room, a flat, or a full multi-storey property, our local team arrives with the right vehicles, equipment and experience to clear your property quickly, efficiently and with respect.",
     "As a licensed waste carrier, we ensure everything we remove is handled responsibly and in full compliance with UK regulations. We recycle over 85% of the items we collect, donate reusable furniture to local charities wherever possible, and dispose of non-recyclable or hazardous waste through approved specialist facilities. Every clearance includes a waste transfer note, giving you complete peace of mind that your waste has been dealt with legally and responsibly.",

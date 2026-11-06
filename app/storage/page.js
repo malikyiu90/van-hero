@@ -10,10 +10,10 @@ const data = {
   pill: "From 25–150 sq ft • Free Collection",
   title: "Secure Storage with Free Collection",
   intro: "Secure, clean and dry storage with FREE collection. Whether you're moving home, decluttering or storing business stock, we'll collect your items, store them safely and give you 24/7 access.",
-  heroImage: "/services/storage.webp",
+  heroImage: "/services/storage-warehouse.webp",
   heroBadge: "Free Collection",
   sectionHeading: "Find the Perfect Storage Unit Size",
-  sectionImage: "/services/manvan.webp",
+  sectionImage: "/services/storage-boxes.webp",
   sectionParas: [
     "Our clean, dry and individually alarmed units are perfect for moving home, decluttering, renovating or storing business stock. Book a unit for 12+ weeks and we'll collect your belongings from your door for free — no van hire needed.",
     "Every unit sits inside a secure, gated and CCTV-monitored facility with 24/7 access, so you can come and go whenever suits you. You only pay for the space you need, with no long lock-in contracts.",

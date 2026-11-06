@@ -10,10 +10,10 @@ const data = {
   pill: "Furniture Moves",
   title: "Furniture Removal & Delivery",
   intro: "Need to move a sofa, wardrobe, dining table or bed? VAN Hero provides safe, reliable furniture collection and delivery across whole UK, with prices from just £45. Whether it's a single purchase or a valuable family piece, we'll get it there safely.",
-  heroImage: "/moves/furniture.webp",
+  heroImage: "/services/furniture-wrapped.webp",
   heroBadge: "Same Day Available",
   sectionHeading: "Single-Item Moves Made Simple",
-  sectionImage: "/services/manvan.webp",
+  sectionImage: "/services/furniture-boxes.webp",
   sectionParas: [
     "Moving one piece of furniture shouldn't mean hiring an entire removal company.",
     "Whether you've found a bargain on Facebook Marketplace, bought something on eBay, or need to transport a family heirloom, VAN Hero offers a straightforward furniture delivery service throughout Whole UK.",

@@ -10,7 +10,8 @@ const data = {
   pill: "Available Today",
   title: "Handyman Services",
   intro: "Skilled local tradesmen from just £45/hour. No job too small.",
-  heroImage: "/services/manvan-hero.webp",
+  heroImage: "/services/handyman.webp",
+  sectionImage: "/services/handyman-wall.webp",
   heroBadge: "Available Today",
   sectionHeading: "UK's Trusted Local Handyman",
   sectionParas: [
