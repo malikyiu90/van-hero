@@ -50,6 +50,19 @@ export default function QuoteWizard() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 
+  const rootRef = useRef(null);
+
+  // When the step changes, bring the top of the wizard into view. Without this
+  // you tap "Next" and land somewhere in the middle of the next step.
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top;
+    if (top < 0 || top > window.innerHeight * 0.5) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [step]);
+
   const L = useLeaflet();
   const mapRef = useRef(null);
   const mapObj = useRef(null);
@@ -161,7 +174,7 @@ export default function QuoteWizard() {
   // min-w-0: as a grid item this must be allowed to shrink, otherwise the
   // scrollable room-tab row stretches the whole section on mobile.
   return (
-    <div className="min-w-0 bg-white rounded-2xl p-5 md:p-6 shadow-[0_40px_80px_-40px_rgba(0,0,0,.7)]">
+    <div ref={rootRef} className="min-w-0 scroll-mt-24 bg-white rounded-2xl p-5 md:p-6 shadow-[0_40px_80px_-40px_rgba(0,0,0,.7)]">
       {/* progress */}
       <div className="flex items-center gap-1.5 sm:gap-2 mb-5">
         {["Move", "Inventory", "Details"].map((label, i) => (
@@ -245,29 +258,35 @@ export default function QuoteWizard() {
 
           {/* current room, with each item's own price */}
           <div>
-            <div className="flex items-baseline justify-between mb-1.5">
+            <div className="flex items-baseline justify-between mb-1">
               <h4 className="font-display font-bold text-ink text-[1.05rem]">{room.room}</h4>
               <span className="text-[.74rem] text-muted">Room {roomIdx + 1} of {INVENTORY.length}</span>
             </div>
+            <p className="text-[.76rem] text-muted mb-2">Tap an item to add it, or use + / −.</p>
 
-            <div className="flex flex-col gap-1 max-h-[330px] sm:max-h-[260px] overflow-y-auto overscroll-contain pr-1">
+            <div className="flex flex-col gap-1">
               {room.items.map((it) => {
                 const qty = inventory[it.id] || 0;
                 return (
                   <div
                     key={it.id}
-                    className={`flex items-center justify-between gap-3 py-2 px-2 -mx-1 rounded-lg transition ${qty ? "bg-brand-yellow/15" : ""}`}
+                    className={`flex items-center justify-between gap-3 min-h-[56px] py-2 px-2 -mx-1 rounded-lg border-b border-line/70 last:border-0 transition ${qty ? "bg-brand-yellow/15" : ""}`}
                   >
-                    <span className="min-w-0">
+                    <button
+                      type="button"
+                      onClick={() => bump(it.id, 1)}
+                      className="min-w-0 flex-1 text-left"
+                      aria-label={`Add one ${it.label}`}
+                    >
                       <span className="block text-[.9rem] text-ink leading-tight">{it.label}</span>
-                      <span className="block text-[.78rem] text-muted">
-                        £{money(it.price)} each{qty > 1 ? ` · £${money(it.price * qty)} total` : ""}
+                      <span className="block text-[.78rem] text-muted whitespace-nowrap">
+                        £{money(it.price)} each{qty > 1 ? ` · £${money(it.price * qty)}` : ""}
                       </span>
-                    </span>
+                    </button>
                     <div className="flex items-center gap-2 shrink-0">
                       <button aria-label={`Remove one ${it.label}`} onClick={() => bump(it.id, -1)} className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-soft text-ink font-bold text-[1.05rem] active:scale-95 transition">−</button>
                       <span className="w-6 text-center font-semibold text-ink tabular-nums">{qty}</span>
-                      <button aria-label={`Add one ${it.label}`} onClick={() => bump(it.id, 1)} className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-brand-yellow text-ink font-bold text-[1.05rem] active:scale-95 transition">+</button>
+                      <button aria-label={`Add another ${it.label}`} onClick={() => bump(it.id, 1)} className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-brand-yellow text-ink font-bold text-[1.05rem] active:scale-95 transition">+</button>
                     </div>
                   </div>
                 );

@@ -44,7 +44,7 @@ export default function FloatingContact() {
   }, [open]);
 
   return (
-    <div className="fixed right-4 bottom-4 sm:right-6 sm:bottom-6 z-[80] flex flex-col items-end gap-3">
+    <div className="fixed left-4 bottom-4 sm:left-6 sm:bottom-6 z-[80] flex flex-col items-start gap-3">
       {ACTIONS.map(({ label, href, Icon, external }, i) => (
         <a
           key={label}
@@ -58,11 +58,11 @@ export default function FloatingContact() {
           }`}
           style={{ transitionDelay: open ? `${i * 45}ms` : `${(ACTIONS.length - 1 - i) * 30}ms` }}
         >
-          <span className="bg-white text-ink font-semibold text-[.9rem] px-4 py-2 rounded-xl shadow-[0_8px_22px_-8px_rgba(4,5,66,.45)] whitespace-nowrap">
-            {label}
-          </span>
           <span className="w-[52px] h-[52px] shrink-0 rounded-full bg-navy text-white grid place-items-center shadow-[0_10px_24px_-8px_rgba(4,5,66,.7)] hover:scale-105 active:scale-95 transition">
             <Icon />
+          </span>
+          <span className="bg-white text-ink font-semibold text-[.9rem] px-4 py-2 rounded-xl shadow-[0_8px_22px_-8px_rgba(4,5,66,.45)] whitespace-nowrap">
+            {label}
           </span>
         </a>
       ))}
