@@ -41,7 +41,7 @@ export default function QuoteWizard() {
   const [inventory, setInventory] = useState({});
   const [roomIdx, setRoomIdx] = useState(0);
   const [otherItems, setOtherItems] = useState("");
-  const [extraMen, setExtraMen] = useState(1);   // on top of the driver
+  const [extraMen, setExtraMen] = useState(null);  // on top of the driver; must be chosen
   const [jobHours, setJobHours] = useState("");  // blank = let the site work it out
   const [extras, setExtras] = useState([]);
   const [contact, setContact] = useState({ name: "", phone: "", email: "" });
@@ -115,7 +115,9 @@ export default function QuoteWizard() {
       return next;
     });
 
-  const validStep1 = pickup.postcode && delivery.postcode && pickup.type && delivery.type && (pickup.type === "Studio" || pickup.size) && (delivery.type === "Studio" || delivery.size);
+  const validStep1 = pickup.postcode && delivery.postcode && pickup.type && delivery.type
+    && (pickup.type === "Studio" || pickup.size) && (delivery.type === "Studio" || delivery.size)
+    && extraMen !== null;
   const itemCount = Object.values(inventory).reduce((a, b) => a + b, 0);
   const room = INVENTORY[roomIdx];
   const roomCount = (r) => r.items.reduce((n, it) => n + (inventory[it.id] || 0), 0);
@@ -128,7 +130,7 @@ export default function QuoteWizard() {
       const r = await fetch("/api/quote", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pickup, delivery, inventory, extras, contact, notes, otherItems,
-          crew: 1 + extraMen, hours: jobHours === "" ? 0 : Number(jobHours),
+          crew: 1 + (extraMen ?? 0), hours: jobHours === "" ? 0 : Number(jobHours),
           moveDate: noDate ? "flexible" : moveDate, mode: "quote" }),
       });
       const j = await r.json();
@@ -219,7 +221,7 @@ export default function QuoteWizard() {
           {/* The driver is in every job; the customer picks who else comes,
               and roughly how long they need them for. */}
           <div className="bg-soft rounded-xl p-4 border border-line">
-            <div className="font-display font-bold text-ink text-[.95rem] mb-1">Who do you need?</div>
+            <div className="font-display font-bold text-ink text-[.95rem] mb-1">Who do you need? *</div>
             <p className="text-[.78rem] text-muted mb-2.5">A driver is included in every quote.</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[0, 1, 2, 3].map((n) => (
@@ -241,7 +243,8 @@ export default function QuoteWizard() {
               ))}
             </div>
 
-            <label className={`${lab} mt-4`}>How many hours do you think you&apos;ll need?</label>
+            <label className={`${lab} mt-4`}>Estimated labour hours</label>
+            <p className="text-[.78rem] text-muted mb-2 -mt-0.5">How long do you think the job will take?</p>
             <div className="flex gap-2 flex-wrap">
               {["", "2", "3", "4", "6", "8"].map((v) => (
                 <button
@@ -259,6 +262,12 @@ export default function QuoteWizard() {
             <span className="block text-[.74rem] text-muted mt-2">
               Not sure? Leave it and we&apos;ll estimate from your distance and property size.
             </span>
+
+            <p className="text-[.76rem] text-muted2 mt-3 pt-3 border-t border-line leading-relaxed">
+              Your quote is worked out from the information you give us here. The price shown is an
+              estimate &mdash; please ring us on <strong className="text-ink">+44 7847 117933</strong> to
+              confirm your exact price.
+            </p>
           </div>
 
           <div>
