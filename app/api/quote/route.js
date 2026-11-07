@@ -100,31 +100,22 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
     : (RATES.crewFor[size] ?? RATES.defaultCrew);
 
   const hourly = RATES.crewHourly[c] ?? RATES.crewHourly[4];
-  const labour = money(h * hourly);
+  // The call-out covers the first few hours, so only the time beyond that is
+  // charged. A two or three hour job therefore costs the same whether the
+  // customer takes one mover or three.
+  const chargeableHours = Math.max(0, h - RATES.freeLabourHours);
+  const labour = money(chargeableHours * hourly);
 
-  // Base call-out is waived on short jobs: up to SHORT_JOB_HOURS the labour
-  // stands on its own, beyond that the call-out applies on top. With no hours
-  // quoted yet we leave the call-out on, which matches the blank sheet (£48).
-  // A short job pays labour only. "Short" covers a quote with no hours on it
-  // but real work priced elsewhere (items, mileage, add-ons) — otherwise a
-  // six-mile three-item move picked up the call-out that a three-hour job
-  // escapes. A truly blank quote still carries it, matching the sheet (£48).
-  const hasChargeableWork =
-    Object.values(inventory || {}).some((q) => (parseInt(q, 10) || 0) > 0) ||
-    Number(miles) > 0 ||
-    (extras || []).length > 0;
-  const shortJob = h <= RATES.shortJobHours && (h > 0 || hasChargeableWork);
-  if (!shortJob) {
-    subtotal += RATES.baseCallout;
-    breakdown.push({ label: "Base charge", amount: RATES.baseCallout });
-  }
+  // Applied to every quote.
+  subtotal += RATES.baseCallout;
+  breakdown.push({ label: "Base charge", amount: RATES.baseCallout });
 
   if (labour > 0) {
     subtotal += labour;
     breakdown.push({
       label: driveHours && !explicitHours
-        ? `Labour (${h}h x ${c} crew — ${driveHours}h travel${handling ? ` + ${handling}h handling` : ""})`
-        : `Labour (${h}h x ${c} crew)`,
+        ? `Labour (${chargeableHours}h chargeable of ${h}h x ${c} crew — ${driveHours}h travel${handling ? ` + ${handling}h handling` : ""})`
+        : `Labour (${chargeableHours}h chargeable of ${h}h x ${c} crew)`,
       amount: labour,
     });
   }

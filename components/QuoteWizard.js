@@ -263,6 +263,11 @@ export default function QuoteWizard() {
               Not sure? Leave it and we&apos;ll estimate from your distance and property size.
             </span>
 
+            <p className="text-[.8rem] text-ink bg-brand-yellow/20 border border-brand-yellow/50 rounded-lg px-3 py-2 mt-3">
+              <strong>Up to 3 hours we don&apos;t charge labour.</strong> Hourly rates only start after that,
+              so a short job costs the same whether you take one mover or three.
+            </p>
+
             <p className="text-[.76rem] text-muted2 mt-3 pt-3 border-t border-line leading-relaxed">
               Your quote is worked out from the information you give us here. The price shown is an
               estimate &mdash; please ring us on <strong className="text-ink">+44 7847 117933</strong> to
