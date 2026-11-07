@@ -72,7 +72,13 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
   // crew spends driving to the address, plus loading and unloading it. The
   // office can still override both by passing hours/crew explicitly.
   const driveHours = miles ? Math.round((miles / RATES.avgSpeedMph) * 2) / 2 : 0;
-  const handling = RATES.handling[size] ?? RATES.defaultHandling;
+
+  // Every inventory item is already priced for the work of moving it, so
+  // adding property-size handling hours on top charges twice for the same
+  // lifting. Handling time is therefore only estimated when the customer
+  // hasn't listed what they're moving — otherwise labour covers travel alone.
+  const itemsListed = Object.values(inventory || {}).some((q) => (parseInt(q, 10) || 0) > 0);
+  const handling = itemsListed ? 0 : (RATES.handling[size] ?? RATES.defaultHandling);
   const estimatedHours = Math.round((driveHours + handling) * 2) / 2;
 
   const explicitHours = Number(hours) > 0;
@@ -89,7 +95,15 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
   // Base call-out is waived on short jobs: up to SHORT_JOB_HOURS the labour
   // stands on its own, beyond that the call-out applies on top. With no hours
   // quoted yet we leave the call-out on, which matches the blank sheet (£48).
-  const shortJob = h > 0 && h <= RATES.shortJobHours;
+  // A short job pays labour only. "Short" covers a quote with no hours on it
+  // but real work priced elsewhere (items, mileage, add-ons) — otherwise a
+  // six-mile three-item move picked up the call-out that a three-hour job
+  // escapes. A truly blank quote still carries it, matching the sheet (£48).
+  const hasChargeableWork =
+    Object.values(inventory || {}).some((q) => (parseInt(q, 10) || 0) > 0) ||
+    Number(miles) > 0 ||
+    (extras || []).length > 0;
+  const shortJob = h <= RATES.shortJobHours && (h > 0 || hasChargeableWork);
   if (!shortJob) {
     subtotal += RATES.baseCallout;
     breakdown.push({ label: "Base charge", amount: RATES.baseCallout });
@@ -99,7 +113,7 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
     subtotal += labour;
     breakdown.push({
       label: driveHours && !explicitHours
-        ? `Labour (${h}h x ${c} crew — ${driveHours}h travel + ${handling}h handling)`
+        ? `Labour (${h}h x ${c} crew — ${driveHours}h travel${handling ? ` + ${handling}h handling` : ""})`
         : `Labour (${h}h x ${c} crew)`,
       amount: labour,
     });
@@ -139,7 +153,7 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
   const vat = money(subtotal * RATES.vat);
   const total = money(subtotal + vat);
   breakdown.push({ label: "VAT (20%)", amount: vat });
-  return { total, breakdown, subtotal };
+  return { total, breakdown, subtotal, usedHours: h, usedCrew: c };
 }
 
 /* ---------- email via Resend ---------- */
@@ -200,7 +214,7 @@ export async function POST(req) {
 
     const d = await drivingMiles(pickup.postcode, delivery.postcode);
     const size = pickup.size || delivery.size || "2 Bed House";
-    const { total, breakdown } = computePrice({ size, inventory, miles: d.miles, pickup, delivery, extras, hours, crew });
+    const { total, breakdown, usedHours, usedCrew } = computePrice({ size, inventory, miles: d.miles, pickup, delivery, extras, hours, crew });
 
     // "preview" mode just returns the price + distance (no email); "quote" mode (final submit) emails the lead.
     // "preview" = price only (no email). "quote" = full calculator submit.
@@ -210,7 +224,8 @@ export async function POST(req) {
     if (mode === "quote" || mode === "enquiry") {
       reference = makeReference();
       const isEnquiry = mode === "enquiry";
-      const lead = { ...contact, pickup, delivery, moveDate, miles: d.miles, hours, crew, service };
+      const lead = { ...contact, pickup, delivery, moveDate, miles: d.miles,
+        hours: usedHours, crew: usedCrew, service };
       try {
         const res = await sendEmails({
           reference,
