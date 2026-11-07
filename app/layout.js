@@ -26,7 +26,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html lang="en-GB" className={`${display.variable} ${body.variable}`}>
       <body className="font-body antialiased">
         <Loader />
         {children}
