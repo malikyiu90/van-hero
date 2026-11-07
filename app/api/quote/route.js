@@ -100,13 +100,16 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
     : (RATES.crewFor[size] ?? RATES.defaultCrew);
 
   const hourly = RATES.crewHourly[c] ?? RATES.crewHourly[4];
-  // The call-out covers the first few hours, so only the time beyond that is
-  // charged. A two or three hour job therefore costs the same whether the
-  // customer takes one mover or three.
-  const chargeableHours = Math.max(0, h - RATES.freeLabourHours);
-  const labour = money(chargeableHours * hourly);
+  // The £40 call-out buys the driver and one more mover for the first two
+  // hours. Time beyond that is charged for those two; a third mover onwards is
+  // charged for the whole job, however short it is.
+  const coveredCrew = Math.min(c, RATES.freeCrew);
+  const extraCrew = Math.max(0, c - RATES.freeCrew);
+  const paidHours = Math.max(0, h - RATES.freeLabourHours);
 
-  // Applied to every quote.
+  const personHours = coveredCrew * paidHours + extraCrew * h;
+  const labour = money(personHours * RATES.perPersonHourly);
+
   subtotal += RATES.baseCallout;
   breakdown.push({ label: "Base charge", amount: RATES.baseCallout });
 
@@ -114,8 +117,8 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
     subtotal += labour;
     breakdown.push({
       label: driveHours && !explicitHours
-        ? `Labour (${chargeableHours}h chargeable of ${h}h x ${c} crew — ${driveHours}h travel${handling ? ` + ${handling}h handling` : ""})`
-        : `Labour (${chargeableHours}h chargeable of ${h}h x ${c} crew)`,
+        ? `Labour (${personHours} paid crew-hours · ${h}h x ${c} · ${driveHours}h travel${handling ? ` + ${handling}h handling` : ""})`
+        : `Labour (${personHours} paid crew-hours · ${h}h x ${c})`,
       amount: labour,
     });
   }
@@ -149,6 +152,13 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
     const amt = RATES.extras[x] || 0;
     if (amt) { subtotal += amt; breakdown.push({ label: x, amount: amt }); }
   });
+
+  // Never quote below the minimum a job is worth turning out for.
+  if (subtotal < RATES.minJobSubtotal) {
+    const topUp = money(RATES.minJobSubtotal - subtotal);
+    subtotal = RATES.minJobSubtotal;
+    breakdown.push({ label: "Minimum job adjustment", amount: topUp });
+  }
 
   subtotal = money(subtotal);
   const vat = money(subtotal * RATES.vat);
