@@ -41,6 +41,8 @@ export default function QuoteWizard() {
   const [inventory, setInventory] = useState({});
   const [roomIdx, setRoomIdx] = useState(0);
   const [otherItems, setOtherItems] = useState("");
+  const [extraMen, setExtraMen] = useState(1);   // on top of the driver
+  const [jobHours, setJobHours] = useState("");  // blank = let the site work it out
   const [extras, setExtras] = useState([]);
   const [contact, setContact] = useState({ name: "", phone: "", email: "" });
   const [notes, setNotes] = useState("");
@@ -125,7 +127,9 @@ export default function QuoteWizard() {
     try {
       const r = await fetch("/api/quote", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pickup, delivery, inventory, extras, contact, notes, otherItems, moveDate: noDate ? "flexible" : moveDate, mode: "quote" }),
+        body: JSON.stringify({ pickup, delivery, inventory, extras, contact, notes, otherItems,
+          crew: 1 + extraMen, hours: jobHours === "" ? 0 : Number(jobHours),
+          moveDate: noDate ? "flexible" : moveDate, mode: "quote" }),
       });
       const j = await r.json();
       if (j.ok) setResult(j); else setError(j.error || "Something went wrong.");
@@ -212,6 +216,51 @@ export default function QuoteWizard() {
               )}
             </div>
           ))}
+          {/* The driver is in every job; the customer picks who else comes,
+              and roughly how long they need them for. */}
+          <div className="bg-soft rounded-xl p-4 border border-line">
+            <div className="font-display font-bold text-ink text-[.95rem] mb-1">Who do you need?</div>
+            <p className="text-[.78rem] text-muted mb-2.5">A driver is included in every quote.</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {[0, 1, 2, 3].map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setExtraMen(n)}
+                  className={`rounded-xl border-2 px-2 py-2.5 text-center transition ${
+                    extraMen === n ? "border-brand-yellow bg-brand-yellow/20" : "border-line hover:border-brand-yellow/50"
+                  }`}
+                >
+                  <span className="block font-display font-bold text-ink text-[.9rem] leading-tight">
+                    {n === 0 ? "Driver only" : `Driver +${n}`}
+                  </span>
+                  <span className="block text-[.72rem] text-muted mt-0.5">
+                    {n + 1} {n === 0 ? "person" : "people"}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <label className={`${lab} mt-4`}>How many hours do you think you&apos;ll need?</label>
+            <div className="flex gap-2 flex-wrap">
+              {["", "2", "3", "4", "6", "8"].map((v) => (
+                <button
+                  key={v || "auto"}
+                  type="button"
+                  onClick={() => setJobHours(v)}
+                  className={`px-3.5 py-2 rounded-xl border-2 text-[.88rem] font-semibold transition ${
+                    jobHours === v ? "border-brand-yellow bg-brand-yellow/20 text-ink" : "border-line text-muted hover:border-brand-yellow/50"
+                  }`}
+                >
+                  {v === "" ? "Not sure" : `${v} hrs`}
+                </button>
+              ))}
+            </div>
+            <span className="block text-[.74rem] text-muted mt-2">
+              Not sure? Leave it and we&apos;ll estimate from your distance and property size.
+            </span>
+          </div>
+
           <div>
             <label className={lab}>Move date</label>
             <input type="date" min={today} className={`${field} cursor-pointer`} value={moveDate} disabled={noDate} onClick={openPicker} onFocus={openPicker} onChange={(e) => setMoveDate(e.target.value)} />

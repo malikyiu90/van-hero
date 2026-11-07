@@ -61,6 +61,11 @@ const floorNum = (f) => ({ "Ground floor": 0, "1st floor": 1, "2nd floor": 2, "3
 // held at 2dp and only the displayed figures are formatted.
 const money = (n) => Math.round(n * 100) / 100;
 
+const hasAnyWork = (inventory, miles, extras) =>
+  Object.values(inventory || {}).some((q) => (parseInt(q, 10) || 0) > 0) ||
+  Number(miles) > 0 ||
+  (extras || []).length > 0;
+
 function computePrice({ size, inventory, miles, pickup, delivery, extras, hours, crew }) {
   const breakdown = [];
   let subtotal = 0;
@@ -79,7 +84,12 @@ function computePrice({ size, inventory, miles, pickup, delivery, extras, hours,
   // hasn't listed what they're moving — otherwise labour covers travel alone.
   const itemsListed = Object.values(inventory || {}).some((q) => (parseInt(q, 10) || 0) > 0);
   const handling = itemsListed ? 0 : (RATES.handling[size] ?? RATES.defaultHandling);
-  const estimatedHours = Math.round((driveHours + handling) * 2) / 2;
+  // A van and crew still have to turn out, so an estimated job never comes in
+  // under the minimum. An explicit figure from the office is left alone.
+  const rawEstimate = Math.round((driveHours + handling) * 2) / 2;
+  const estimatedHours = hasAnyWork(inventory, miles, extras)
+    ? Math.max(RATES.minJobHours, rawEstimate)
+    : rawEstimate;
 
   const explicitHours = Number(hours) > 0;
   const h = explicitHours ? Math.max(0, Number(hours)) : estimatedHours;

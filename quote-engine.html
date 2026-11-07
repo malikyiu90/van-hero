@@ -1,0 +1,265 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Van Hero Quote Engine</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: a single reading column; rate tables and the inventory break into
+   responsive grids. Brand palette taken from the Van Hero logo. */
+:root{
+  --navy:#040542; --royal:#002497; --yellow:#ffd41c;
+  --ink:#0f1033; --muted:#5b6080; --faint:#878ba8;
+  --bg:#ffffff; --panel:#f6f7fb; --panel2:#eef0f8; --line:#dfe3f0;
+  --ok:#0b7a52; --warn:#9a5b00;
+  --display:"Bricolage Grotesque",Georgia,serif;
+  --body:"Inter",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --navy:#c9cdf2; --royal:#8fa6ff; --yellow:#ffd41c;
+  --ink:#e9eaf5; --muted:#a3a8c4; --faint:#7b81a0;
+  --bg:#0a0b1e; --panel:#13142e; --panel2:#1b1d3c; --line:#2b2e55;
+  --ok:#4fd0a0; --warn:#ffc46b; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --navy:#c9cdf2; --royal:#8fa6ff; --yellow:#ffd41c;
+  --ink:#e9eaf5; --muted:#a3a8c4; --faint:#7b81a0;
+  --bg:#0a0b1e; --panel:#13142e; --panel2:#1b1d3c; --line:#2b2e55;
+  --ok:#4fd0a0; --warn:#ffc46b; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0}
+h1{font-size:clamp(1.9rem,5vw,2.7rem);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+h2{font-size:clamp(1.3rem,3.2vw,1.65rem);font-weight:800;letter-spacing:-.015em}
+h3{font-size:1.05rem;font-weight:700}
+h4{font-size:.95rem;font-weight:700}
+p{margin:0}
+.lede{color:var(--muted);font-size:1.02rem;max-width:62ch}
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--royal)}
+
+header.top{padding-block:40px 28px;border-bottom:3px solid var(--yellow);display:flex;flex-direction:column;gap:12px}
+.badge{display:inline-flex;align-items:center;gap:7px;background:var(--yellow);color:#040542;font-weight:600;font-size:.76rem;padding:5px 11px;border-radius:999px;width:max-content}
+.meta{color:var(--faint);font-size:.82rem}
+
+section.blk{padding-block:34px;border-bottom:1px solid var(--line)}
+section.blk:last-of-type{border-bottom:0}
+.blk>h2{margin-bottom:6px}
+.blk>.lede{margin-bottom:18px}
+
+/* formula */
+.formula{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--royal);border-radius:10px;padding:18px 20px;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:.88rem;line-height:1.9;overflow-x:auto;color:var(--ink)}
+.formula b{color:var(--royal);font-weight:600}
+.formula .c{color:var(--faint)}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:600}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.note{color:var(--muted);font-size:.84rem;margin-top:10px}
+
+/* rate groups */
+.rates{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.card h3{margin-bottom:8px;color:var(--navy)}
+.card table td{padding:6px 0;border-bottom:1px dashed var(--line)}
+
+/* scenarios */
+.scns{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.scn{border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0;background:var(--bg)}
+.scn header{background:var(--panel2);padding:11px 14px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-bottom:1px solid var(--line)}
+.scn header h4{color:var(--navy)}
+.scn-meta{font-size:.76rem;color:var(--faint);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.calc{font-size:.84rem}
+table.calc td{padding:7px 14px}
+table.calc tr.vat td{color:var(--muted)}
+table.calc tr.tot td{font-weight:700;background:var(--panel);border-bottom:0;color:var(--navy)}
+
+/* inventory */
+.invgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.room{border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0;background:var(--panel)}
+.room h4{color:var(--navy);margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.room h4 span{font-family:var(--body);font-size:.7rem;color:var(--faint);font-weight:500}
+.room td{padding:5px 0;border-bottom:1px dashed var(--line);font-size:.84rem}
+
+/* callouts */
+.flag{border-left:4px solid var(--warn);background:var(--panel);border-radius:0 10px 10px 0;padding:14px 16px;margin-top:14px}
+.flag h4{color:var(--warn);margin-bottom:5px}
+.flag p{color:var(--muted);font-size:.88rem}
+ul.plain{margin:10px 0 0;padding-left:18px;color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap:6px}
+ul.plain b{color:var(--ink);font-weight:600}
+.pill{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.8rem;font-variant-numeric:tabular-nums}
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <span class="badge">V.M.T Removals · Van Hero</span>
+  <h1>How the quote is worked out</h1>
+  <p class="lede">Every charge the website can apply, the formula behind it, and worked examples taken from the live system. This replaces guessing at what the calculator did — each figure here was produced by the site itself.</p>
+  <p class="meta">Generated 7 November 2026 · figures verified against vanhero.online</p>
+</header>
+
+<section class="blk">
+  <span class="eyebrow">The formula</span>
+  <h2>Six things make up a price</h2>
+  <p class="lede">They are added together, then VAT is applied to the lot. Nothing is rounded until the end, so 23 miles is £34.50, not £35.</p>
+  <div class="formula">
+<b>SUBTOTAL</b> = Call-out + Labour + Mileage + Inventory + Access + Add-ons<br>
+<b>VAT</b>      = SUBTOTAL × 20%<br>
+<b>TOTAL</b>    = SUBTOTAL + VAT<br><br>
+<span class="c">where</span><br>
+Call-out   = £40 <span class="c">— waived when the job is 4 hours or less</span><br>
+Labour     = hours × crew hourly rate<br>
+Mileage    = miles × £1.50<br>
+Inventory  = each item's price × how many<br>
+Access     = stairs, no lift, loft, cellar, long carry, parking<br>
+Add-ons    = packing, dismantling, storage handling
+  </div>
+  <p class="note">The call-out rule means a short job stands on its own labour. A job over four hours picks up the £40 on top.</p>
+</section>
+
+<section class="blk">
+  <span class="eyebrow">Rates</span>
+  <h2>What each thing costs</h2>
+  <p class="lede">These are the V.M.T rate card figures the site uses. Change one here and every quote changes with it.</p>
+  <div class="rates">
+
+    <div class="card">
+      <h3>Crew, per hour</h3>
+      <table><tbody>
+        <tr><td>1 mover</td><td class="num">£15.00</td></tr>
+        <tr><td>2 movers</td><td class="num">£30.00</td></tr>
+        <tr><td>3 movers</td><td class="num">£45.00</td></tr>
+        <tr><td>4 movers</td><td class="num">£60.00</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="card">
+      <h3>Base</h3>
+      <table><tbody>
+        <tr><td>Call-out / admin</td><td class="num">£40.00</td></tr>
+        <tr><td>Waived up to</td><td class="num">4 hours</td></tr>
+        <tr><td>Mileage, per mile</td><td class="num">£1.50</td></tr>
+        <tr><td>VAT</td><td class="num">20%</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="card">
+      <h3>Access surcharges</h3>
+      <table><tbody>
+        <tr><td>Stairs, per floor</td><td class="num">£30.00</td></tr>
+        <tr><td>No lift, per address</td><td class="num">£50.00</td></tr>
+        <tr><td>Loft access</td><td class="num">£75.00</td></tr>
+        <tr><td>Cellar access</td><td class="num">£75.00</td></tr>
+        <tr><td>Long carry, each end</td><td class="num">£40.00</td></tr>
+        <tr><td>Difficult parking, per address</td><td class="num">£40.00</td></tr>
+        <tr><td>Extra trip</td><td class="num">£300.00</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="card">
+      <h3>Add-ons</h3>
+      <table><tbody>
+        <tr><td>Full packing service</td><td class="num">£180.00</td></tr>
+        <tr><td>Fragile items only</td><td class="num">£75.00</td></tr>
+        <tr><td>Dismantling</td><td class="num">£50.00</td></tr>
+        <tr><td>Reassembly</td><td class="num">£50.00</td></tr>
+        <tr><td>Dismantling + reassembly</td><td class="num">£90.00</td></tr>
+        <tr><td>Storage handling</td><td class="num">£50.00</td></tr>
+      </tbody></table>
+    </div>
+
+  </div>
+  <div class="flag">
+    <h4>Only stairs and no-lift are asked for on the website</h4>
+    <p>Loft, cellar, long carry, difficult parking and extra trips are all priced in the engine, but the customer is never asked about them. The office adds them when confirming. A quote that needs them will come out low until it is confirmed.</p>
+  </div>
+</section>
+
+<section class="blk">
+  <span class="eyebrow">Hours and crew</span>
+  <h2>Where the hours come from</h2>
+  <p class="lede">The spreadsheet has you type the hours and crew in. A customer can't be asked that, so the site works them out — and whatever the office sends in overrides it.</p>
+
+  <div class="formula">
+hours = <b>travel time</b> + <b>handling time</b><br>
+travel time   = miles ÷ 60 mph <span class="c">(rounded to the nearest half hour)</span><br>
+handling time = <b>0</b> when the customer has itemised the move<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= from the property size when they haven't
+  </div>
+  <p class="note">Every inventory item is already priced for the work of carrying it. Charging property-size handling hours on top of that would bill the same sofa twice, so handling only applies when nothing has been itemised.</p>
+
+  <div class="rates" style="margin-top:18px">
+    <div class="card">
+      <h3>Handling hours, if nothing is itemised</h3>
+      <table><tbody>
+        <tr><td>Studio</td><td class="num">2 h</td></tr>
+        <tr><td>1 bed</td><td class="num">2 – 2.5 h</td></tr>
+        <tr><td>2 bed</td><td class="num">3 h</td></tr>
+        <tr><td>3 bed</td><td class="num">4 h</td></tr>
+        <tr><td>4 bed</td><td class="num">5 h</td></tr>
+        <tr><td>5+ bed</td><td class="num">6 h</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card">
+      <h3>Crew, by property size</h3>
+      <table><tbody>
+        <tr><td>Studio to 2 bed</td><td class="num">2 movers</td></tr>
+        <tr><td>3 bed</td><td class="num">3 movers</td></tr>
+        <tr><td>4 bed and above</td><td class="num">4 movers</td></tr>
+      </tbody></table>
+      <p class="note">Average speed is set to <span class="pill">60 mph</span>. A 380-mile job is 6.5 hours of driving.</p>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <span class="eyebrow">Worked examples</span>
+  <h2>Ten real quotes</h2>
+  <p class="lede">Each of these was run through the live site and the arithmetic checked against the rate card independently. Read them as the answer to "why did it say that?".</p>
+  <div class="scns">
+<article class="scn"><header><h4>Empty quote — 2-bed flat, same postcode</h4><div class="scn-meta">0 miles</div></header><table class="calc"><tbody><tr><td>Labour (3h x 2 crew)</td><td class="num">£90.00</td></tr><tr class="vat"><td>VAT (20%)</td><td class="num">£18.00</td></tr><tr class="tot"><td>Total including VAT</td><td class="num">£108.00</td></tr></tbody></table></article><article class="scn"><header><h4>Small local move with packing</h4><div class="scn-meta">6 miles</div></header><table class="calc"><tbody><tr><td>Mileage (6 mi)</td><td class="num">£9.00</td></tr><tr><td>Inventory / items</td><td class="num">£47.00</td></tr><tr><td>Full packing service</td><td class="num">£180.00</td></tr><tr class="vat"><td>VAT (20%)</td><td class="num">£47.20</td></tr><tr class="tot"><td>Total including VAT</td><td class="num">£283.20</td></tr></tbody></table></article><article class="scn"><header><h4>Same move, no packing</h4><div class="scn-meta">6 miles</div></header><table class="calc"><tbody><tr><td>Mileage (6 mi)</td><td class="num">£9.00</td></tr><tr><td>Inventory / items</td><td class="num">£47.00</td></tr><tr class="vat"><td>VAT (20%)</td><td class="num">£11.20</td></tr><tr class="tot"><td>Total including VAT</td><td class="num">£67.20</td></tr></tbody></table></article><article class="scn"><header><h4>2-bed move, nothing itemised</h4><div class="scn-meta">21 miles</div></header><table class="calc"><tbody><tr><td>Labour (3.5h x 2 crew · 0.5h travel + 3h handling)</td><td class="num">£105.00</td></tr><tr><td>Mileage (21 mi)</td><td class="num">£31.50</td></tr><tr class="vat"><td>VAT (20%)</td><td class="num">£27.30</td></tr><tr class="tot"><td>Total including VAT</td><td class="num">£163.80</td></tr></tbody></table></article><article class="scn"><header><h4>3rd-floor flat, no lift</h4><div class="scn-meta">3 miles</div></header><table class="calc"><tbody><tr><td>Mileage (3 mi)</td><td class="num">£4.50</td></tr><tr><td>Inventory / items</td><td class="num">£65.00</td></tr><tr><td>Collection stairs (3 floor)</td><td class="num">£90.00</td></tr><tr><td>Collection no lift</td><td class="num">£50.00</td></tr><tr class="vat"><td>VAT (20%)</td><td class="num">£41.90</td></tr><tr class="tot"><td>Total including VAT</td><td class="num">£251.40</td></tr></tbody></table></article><article class="scn"><header><h4>Long haul, itemised</h4><div class="scn-meta">331 miles</div></header><table class="calc"><tbody><tr><td>Base charge</td><td class="num">£40.00</td></tr><tr><td>Labour (5.5h x 2 crew · 5.5h travel)</td><td class="num">£165.00</td></tr><tr><td>Mileage (331 mi)</td><td class="num">£496.50</td></tr><tr><td>Inventory / items</td><td class="num">£20.00</td></tr><tr class="vat"><td>VAT (20%)</td><td class="num">£144.30</td></tr><tr class="tot"><td>Total including VAT</td><td class="num">£865.80</td></tr></tbody></table></article><article class="scn"><header><h4>Long haul, nothing itemised</h4><div class="scn-meta">331 miles</div></header><table class="calc"><tbody><tr><td>Base charge</td><td class="num">£40.00</td></tr><tr><td>Labour (9.5h x 3 crew · 5.5h travel + 4h handling)</td><td class="num">£427.50</td></tr><tr><td>Mileage (331 mi)</td><td class="num">£496.50</td></tr><tr class="vat"><td>VAT (20%)</td><td class="num">£192.80</td></tr><tr class="tot"><td>Total including VAT</td><td class="num">£1156.80</td></tr></tbody></table></article><article class="scn"><header><h4>Piano and wardrobes, dismantling</h4><div class="scn-meta">21 miles</div></header><table class="calc"><tbody><tr><td>Labour (0.5h x 3 crew · 0.5h travel)</td><td class="num">£22.50</td></tr><tr><td>Mileage (21 mi)</td><td class="num">£31.50</td></tr><tr><td>Inventory / items</td><td class="num">£210.00</td></tr><tr><td>Dismantling + reassembly</td><td class="num">£90.00</td></tr><tr class="vat"><td>VAT (20%)</td><td class="num">£70.80</td></tr><tr class="tot"><td>Total including VAT</td><td class="num">£424.80</td></tr></tbody></table></article><article class="scn"><header><h4>Office sets its own hours</h4><div class="scn-meta">0 miles</div></header><table class="calc"><tbody><tr><td>Base charge</td><td class="num">£40.00</td></tr><tr><td>Labour (10h x 3 crew)</td><td class="num">£450.00</td></tr><tr class="vat"><td>VAT (20%)</td><td class="num">£98.00</td></tr><tr class="tot"><td>Total including VAT</td><td class="num">£588.00</td></tr></tbody></table></article><article class="scn"><header><h4>Single item, studio</h4><div class="scn-meta">3 miles</div></header><table class="calc"><tbody><tr><td>Mileage (3 mi)</td><td class="num">£4.50</td></tr><tr><td>Inventory / items</td><td class="num">£25.00</td></tr><tr class="vat"><td>VAT (20%)</td><td class="num">£5.90</td></tr><tr class="tot"><td>Total including VAT</td><td class="num">£35.40</td></tr></tbody></table></article>
+  </div>
+</section>
+
+<section class="blk">
+  <span class="eyebrow">Watch these</span>
+  <h2>Where the numbers still look wrong</h2>
+  <p class="lede">The arithmetic is right in all ten cases above. These two are rate-card decisions, not faults in the calculation.</p>
+
+  <div class="flag">
+    <h4>Small local jobs come out very low</h4>
+    <p>Three items moved six miles prices at <span class="pill">£67.20</span>, and a single washing machine at <span class="pill">£35.40</span>. With no hours on the job there is no labour and no call-out, so only the item prices and mileage remain — a crew and a van for a morning for £56 before VAT. A minimum job charge would set the floor.</p>
+  </div>
+
+  <div class="flag">
+    <h4>Packing is a flat £180 whatever the size</h4>
+    <p>On the six-mile, three-item move it is <span class="pill">64%</span> of the bill and takes the quote to £283.20. The £180 rate is built for packing a whole house, not three pieces of furniture. Scaling it with the inventory, or using the £75 fragile-only rate below a threshold, would bring that job into the £200–250 range.</p>
+  </div>
+</section>
+
+<section class="blk">
+  <span class="eyebrow">Inventory</span>
+  <h2>All 82 item prices</h2>
+  <p class="lede">What the customer ticks in the wizard. These prices cover carrying the item, so labour is not added again on top.</p>
+  <div class="invgrid">
+<section class="room"><h4>Living room <span>11</span></h4><table><tbody><tr><td>2-seater sofa</td><td class="num">£15.00</td></tr><tr><td>3-seater sofa</td><td class="num">£20.00</td></tr><tr><td>Corner / L-shaped sofa</td><td class="num">£30.00</td></tr><tr><td>Sofa bed</td><td class="num">£30.00</td></tr><tr><td>Recliner</td><td class="num">£20.00</td></tr><tr><td>Armchair</td><td class="num">£12.00</td></tr><tr><td>Coffee table</td><td class="num">£8.00</td></tr><tr><td>TV</td><td class="num">£10.00</td></tr><tr><td>TV stand</td><td class="num">£10.00</td></tr><tr><td>Bookcase</td><td class="num">£12.00</td></tr><tr><td>Sideboard</td><td class="num">£15.00</td></tr></tbody></table></section><section class="room"><h4>Dining <span>4</span></h4><table><tbody><tr><td>Dining table (small)</td><td class="num">£15.00</td></tr><tr><td>Dining table (large)</td><td class="num">£25.00</td></tr><tr><td>Dining chair</td><td class="num">£4.00</td></tr><tr><td>Display cabinet</td><td class="num">£18.00</td></tr></tbody></table></section><section class="room"><h4>Kitchen <span>8</span></h4><table><tbody><tr><td>Fridge</td><td class="num">£20.00</td></tr><tr><td>Freezer</td><td class="num">£20.00</td></tr><tr><td>Fridge-freezer</td><td class="num">£25.00</td></tr><tr><td>American fridge-freezer</td><td class="num">£75.00</td></tr><tr><td>Washing machine</td><td class="num">£25.00</td></tr><tr><td>Tumble dryer</td><td class="num">£20.00</td></tr><tr><td>Dishwasher</td><td class="num">£25.00</td></tr><tr><td>Cooker / oven</td><td class="num">£30.00</td></tr></tbody></table></section><section class="room"><h4>Bedroom <span>13</span></h4><table><tbody><tr><td>Single bed</td><td class="num">£20.00</td></tr><tr><td>Double bed</td><td class="num">£25.00</td></tr><tr><td>King / super king bed</td><td class="num">£35.00</td></tr><tr><td>Bunk bed</td><td class="num">£30.00</td></tr><tr><td>Single mattress</td><td class="num">£10.00</td></tr><tr><td>Double mattress</td><td class="num">£15.00</td></tr><tr><td>King / super king mattress</td><td class="num">£20.00</td></tr><tr><td>Bedside table</td><td class="num">£5.00</td></tr><tr><td>Chest of drawers</td><td class="num">£12.00</td></tr><tr><td>Small wardrobe</td><td class="num">£20.00</td></tr><tr><td>Double wardrobe</td><td class="num">£30.00</td></tr><tr><td>Triple / large wardrobe</td><td class="num">£45.00</td></tr><tr><td>Sliding-door wardrobe</td><td class="num">£50.00</td></tr></tbody></table></section><section class="room"><h4>Office <span>4</span></h4><table><tbody><tr><td>Office desk</td><td class="num">£12.00</td></tr><tr><td>Office chair</td><td class="num">£5.00</td></tr><tr><td>Filing cabinet</td><td class="num">£12.00</td></tr><tr><td>Printer / copier</td><td class="num">£10.00</td></tr></tbody></table></section><section class="room"><h4>General <span>4</span></h4><table><tbody><tr><td>General box</td><td class="num">£2.00</td></tr><tr><td>Large picture / artwork</td><td class="num">£8.00</td></tr><tr><td>Suitcase</td><td class="num">£4.00</td></tr><tr><td>Mirror</td><td class="num">£8.00</td></tr></tbody></table></section><section class="room"><h4>Garden / Garage <span>10</span></h4><table><tbody><tr><td>Garden table</td><td class="num">£15.00</td></tr><tr><td>Garden chair</td><td class="num">£4.00</td></tr><tr><td>BBQ</td><td class="num">£15.00</td></tr><tr><td>Lawn mower</td><td class="num">£15.00</td></tr><tr><td>Bicycle</td><td class="num">£10.00</td></tr><tr><td>Tool chest</td><td class="num">£20.00</td></tr><tr><td>Garage shelving</td><td class="num">£15.00</td></tr><tr><td>Trampoline</td><td class="num">£30.00</td></tr><tr><td>Shed contents - small</td><td class="num">£50.00</td></tr><tr><td>Shed contents - large</td><td class="num">£100.00</td></tr></tbody></table></section><section class="room"><h4>Nursery <span>3</span></h4><table><tbody><tr><td>Cot / cot bed</td><td class="num">£15.00</td></tr><tr><td>Pushchair / pram</td><td class="num">£10.00</td></tr><tr><td>Toy box</td><td class="num">£5.00</td></tr></tbody></table></section><section class="room"><h4>Gym / Hobby <span>7</span></h4><table><tbody><tr><td>Treadmill</td><td class="num">£50.00</td></tr><tr><td>Exercise bike</td><td class="num">£30.00</td></tr><tr><td>Cross trainer</td><td class="num">£40.00</td></tr><tr><td>Rowing machine</td><td class="num">£35.00</td></tr><tr><td>Weight bench</td><td class="num">£30.00</td></tr><tr><td>Multi-gym</td><td class="num">£75.00</td></tr><tr><td>Drum kit</td><td class="num">£40.00</td></tr></tbody></table></section><section class="room"><h4>Heavy / Specialist <span>12</span></h4><table><tbody><tr><td>Upright piano</td><td class="num">£150.00</td></tr><tr><td>Baby grand piano</td><td class="num">£300.00</td></tr><tr><td>Grand piano</td><td class="num">£450.00</td></tr><tr><td>Large safe</td><td class="num">£150.00</td></tr><tr><td>Pool / snooker table</td><td class="num">£250.00</td></tr><tr><td>Marble / stone table</td><td class="num">£100.00</td></tr><tr><td>Large aquarium / fish tank</td><td class="num">£100.00</td></tr><tr><td>Hot tub / spa</td><td class="num">£250.00</td></tr><tr><td>Large antique furniture</td><td class="num">£75.00</td></tr><tr><td>Fine art / valuable artwork</td><td class="num">£50.00</td></tr><tr><td>Commercial gym machine</td><td class="num">£100.00</td></tr><tr><td>Heavy workshop equipment</td><td class="num">£100.00</td></tr></tbody></table></section><section class="room"><h4>Boxes / Loft <span>6</span></h4><table><tbody><tr><td>Loft box</td><td class="num">£4.00</td></tr><tr><td>Storage crate</td><td class="num">£4.00</td></tr><tr><td>Cellar box</td><td class="num">£4.00</td></tr><tr><td>Small box</td><td class="num">£1.50</td></tr><tr><td>Medium box</td><td class="num">£3.00</td></tr><tr><td>Large box</td><td class="num">£4.25</td></tr></tbody></table></section>
+  </div>
+</section>
+
+<section class="blk">
+  <span class="eyebrow">Reference</span>
+  <h2>Quote references and email</h2>
+  <ul class="plain">
+    <li><b>Customer quotes</b> get a reference like <span class="pill">VH-261107-4P6W</span> — VH, the date, then four characters.</li>
+    <li><b>Driver applications</b> use <span class="pill">VH-APP-261107-KEGW</span>.</li>
+    <li>The office copy goes to <b>Vmtofficials@gmail.com</b> with the full breakdown, the itemised inventory and the customer's own description. Replying to it reaches the customer.</li>
+    <li>The customer's copy shows <b>the total only</b> — never the line-by-line breakdown.</li>
+    <li>Quotes send from <b>quotes@vanhero.online</b>, driver applications from <b>partners@vanhero.online</b>.</li>
+    <li>A failed send is retried once and logged with the lead's name and number, so a lost email can still be chased.</li>
+  </ul>
+</section>
+
+</div>
