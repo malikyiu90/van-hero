@@ -5,21 +5,48 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /* ---------- distance (free: postcodes.io + optional OpenRouteService) ---------- */
+
+// People type "Birmingham, B30 2YQ" or "b302yq" as often as they type a bare
+// postcode. The lookup only accepts the postcode itself, and a miss used to
+// mean the mileage silently came out at zero — so pull the postcode out of
+// whatever was entered and normalise it before asking.
+export function normalisePostcode(input) {
+  const cleaned = String(input || "").toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
+  // Anchored on a word boundary so a town name can't lend its last letter to
+  // the outward code ("BIRMINGHAM B30 2YQ" must not become "MB30 2YQ").
+  let m = cleaned.match(/\b([A-Z]{1,2}[0-9][A-Z0-9]?) ?([0-9][A-Z]{2})\b/);
+  if (!m) m = cleaned.replace(/ +/g, "").match(/([A-Z]{1,2}[0-9][A-Z0-9]?)([0-9][A-Z]{2})$/);
+  if (!m) return "";
+  return `${m[1]} ${m[2]}`;
+}
+
 async function coords(pc) {
-  const clean = String(pc || "").trim();
-  if (!clean) return null;
-  try {
-    const r = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(clean)}`, {
-      cache: "no-store",
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!r.ok) return null;
-    const j = await r.json();
-    if (j.status !== 200 || !j.result) return null;
-    return { lat: j.result.latitude, lon: j.result.longitude };
-  } catch {
+  const clean = normalisePostcode(pc);
+  if (!clean) {
+    console.error(`[quote] no usable postcode in "${String(pc || "").slice(0, 40)}" — distance not charged`);
     return null;
   }
+  // One retry: a timeout or a blip shouldn't cost the mileage on a real job.
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const r = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(clean)}`, {
+        cache: "no-store",
+        signal: AbortSignal.timeout(8000),
+      });
+      if (r.status === 404) {
+        console.error(`[quote] postcode ${clean} does not exist — asking the customer for the distance`);
+        return null;
+      }
+      if (r.ok) {
+        const j = await r.json();
+        if (j.status === 200 && j.result) return { lat: j.result.latitude, lon: j.result.longitude };
+      }
+      console.error(`[quote] postcode ${clean} lookup attempt ${attempt} failed (HTTP ${r.status})`);
+    } catch (e) {
+      console.error(`[quote] postcode ${clean} lookup attempt ${attempt} threw: ${e?.message || e}`);
+    }
+  }
+  return null;
 }
 function haversineMiles(a, b) {
   const R = 3958.8;
@@ -222,10 +249,14 @@ export async function POST(req) {
     const notes = String(body.notes || "").slice(0, 2000);
     const service = String(body.service || "").slice(0, 120);
     const otherItems = String(body.otherItems || "").slice(0, 1000);
+    // Used only when the postcodes can't be resolved.
+    const manualMiles = Math.max(0, Math.min(2000, Number(body.manualMiles) || 0));
 
     const d = await drivingMiles(pickup.postcode, delivery.postcode);
+    const milesKnown = d.miles != null;
+    const miles = milesKnown ? d.miles : (manualMiles || null);
     const size = pickup.size || delivery.size || "2 Bed House";
-    const { total, breakdown, usedHours, usedCrew } = computePrice({ size, inventory, miles: d.miles, pickup, delivery, extras, hours, crew });
+    const { total, breakdown, usedHours, usedCrew } = computePrice({ size, inventory, miles, pickup, delivery, extras, hours, crew });
 
     // "preview" mode just returns the price + distance (no email); "quote" mode (final submit) emails the lead.
     // "preview" = price only (no email). "quote" = full calculator submit.
@@ -235,7 +266,7 @@ export async function POST(req) {
     if (mode === "quote" || mode === "enquiry") {
       reference = makeReference();
       const isEnquiry = mode === "enquiry";
-      const lead = { ...contact, pickup, delivery, moveDate, miles: d.miles,
+      const lead = { ...contact, pickup, delivery, moveDate, miles,
         hours: usedHours, crew: usedCrew, service };
       try {
         const res = await sendEmails({
@@ -243,7 +274,7 @@ export async function POST(req) {
           kind: isEnquiry ? "enquiry" : "quote",
           quote: isEnquiry ? null : total,
           breakdown: isEnquiry ? [] : breakdown,
-          miles: d.miles, lead, inventory, extras, notes, otherItems,
+          miles, lead, inventory, extras, notes, otherItems,
         });
         emailed = res.sent;
       } catch (e) {
@@ -259,7 +290,10 @@ export async function POST(req) {
     return Response.json({
       ok: true,
       quote: mode === "enquiry" ? null : total,
-      miles: d.miles,
+      miles,
+      // tells the wizard to ask the customer how far it is
+      needsMiles: !milesKnown && !manualMiles,
+      milesFromCustomer: !milesKnown && manualMiles > 0,
       breakdown: mode === "enquiry" ? [] : breakdown,
       emailed, reference,
     });

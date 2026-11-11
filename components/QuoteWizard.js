@@ -43,6 +43,7 @@ export default function QuoteWizard() {
   const [otherItems, setOtherItems] = useState("");
   const [extraMen, setExtraMen] = useState(null);  // on top of the driver; must be chosen
   const [jobHours, setJobHours] = useState("");  // blank = let the site work it out
+  const [manualMiles, setManualMiles] = useState("");  // only if the postcodes won't resolve
   const [extras, setExtras] = useState([]);
   const [contact, setContact] = useState({ name: "", phone: "", email: "" });
   const [notes, setNotes] = useState("");
@@ -131,6 +132,7 @@ export default function QuoteWizard() {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pickup, delivery, inventory, extras, contact, notes, otherItems,
           crew: 1 + (extraMen ?? 0), hours: jobHours === "" ? 0 : Number(jobHours),
+          manualMiles: manualMiles === "" ? 0 : Number(manualMiles),
           moveDate: noDate ? "flexible" : moveDate, mode: "quote" }),
       });
       const j = await r.json();
@@ -292,9 +294,36 @@ export default function QuoteWizard() {
             <div ref={mapRef} className="w-full h-[210px] sm:h-[180px] bg-softblue" />
             <div className="flex items-center justify-between px-4 py-2.5 bg-navy text-white text-[.85rem]">
               <span>{pickup.postcode?.toUpperCase()} → {delivery.postcode?.toUpperCase()}</span>
-              <span className="font-bold text-brand-yellow">{miles != null ? `${miles} mi` : "…"}</span>
+              <span className="font-bold text-brand-yellow">
+                {miles != null ? `${miles} mi` : manualMiles !== "" ? `${manualMiles} mi` : "…"}
+              </span>
             </div>
           </div>
+
+          {/* Only shown if we genuinely couldn't place the postcodes — without
+              this the journey would be priced at zero miles. */}
+          {!coords && miles == null && (
+            <div className="bg-brand-yellow/15 border border-brand-yellow rounded-xl p-4">
+              <label className={lab}>How far is the journey?</label>
+              <p className="text-[.8rem] text-muted mb-2">
+                We couldn&apos;t find one of those postcodes. Tell us roughly how many miles it is so
+                we can price the journey &mdash; or go back and check the postcodes.
+              </p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  max="2000"
+                  inputMode="numeric"
+                  className={`${field} max-w-[140px]`}
+                  placeholder="e.g. 45"
+                  value={manualMiles}
+                  onChange={(e) => setManualMiles(e.target.value)}
+                />
+                <span className="text-[.9rem] text-muted">miles</span>
+              </div>
+            </div>
+          )}
 
           {/* room tabs — jump around; badge shows what's already added */}
           <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1">
